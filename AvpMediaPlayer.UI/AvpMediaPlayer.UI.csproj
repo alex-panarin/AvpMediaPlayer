@@ -15,5 +15,8 @@
     <ProjectReference Include="..\AvpMediaPlayer.Core\AvpMediaPlayer.Core.csproj" />
     <ProjectReference Include="..\AvpMediaPlayer.Media\AvpMediaPlayer.Media.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Views\" />
+  </ItemGroup>
 
 </Project>
