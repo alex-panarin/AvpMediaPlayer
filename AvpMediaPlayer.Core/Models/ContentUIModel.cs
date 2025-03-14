@@ -28,7 +28,7 @@ namespace AvpMediaPlayer.Core.Models
                 return _Contents;
             }
         }
-
+        public string? Title { get => Model?.Name; }
         public bool IsDirectory => Model?.IsRoot == true;
     }
 }

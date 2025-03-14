@@ -22,40 +22,39 @@ namespace AvpMediaPlayer.UI.ViewModels
         
         public ContentViewModel()
         {
-            OnPrevRoot = new(() =>
-            {
-                IsWaitLoad = true;
+            //OnPrevRoot = new(() =>
+            //{
+            //    IsWaitLoad = true;
 
-                Task.Run(() =>
-                {
-                    var hasValue = _history.TryPop(out var content);
+            //    Task.Run(() =>
+            //    {
+            //        var hasValue = _history.TryPop(out var content);
 
-                    if (hasValue)
-                    {
-                        _Contents = content.Value;
-                    }
+            //        if (hasValue)
+            //        {
+            //            _Contents = content.Value;
+            //        }
 
-                    Dispatcher.UIThread.Invoke(() =>
-                    {
-                        IsWaitLoad = false;
+            //        Dispatcher.UIThread.Invoke(() =>
+            //        {
+            //            IsWaitLoad = false;
                         
-                        if (hasValue)
-                        {
-                            SelectedItem = content.Key;
-                            OnPropertyChanged(nameof(Contents));
-                        }
+            //            if (hasValue)
+            //            {
+            //                SelectedItem = content.Key;
+            //                OnPropertyChanged(nameof(Contents));
+            //            }
 
-                        OnPropertyChanged(nameof(IsPrevVisible));
-                    });
-                });
-            });
+            //            OnPropertyChanged(nameof(IsPrevVisible));
+            //        });
+            //    });
+            //});
         }
         public ContentViewModel(IContentLoadFactory contentFactory)
             : this()
         {
             _contentFactory = contentFactory ?? throw new ArgumentNullException(nameof(contentFactory));
-            RibbonViewModel = new(this, OnRibbonButtonClick);
-
+            //RibbonViewModel = new(OnRibbonButtonClick);
         }
         public ObservableCollection<ContentUIModel>? Roots 
         { 
@@ -109,13 +108,7 @@ namespace AvpMediaPlayer.UI.ViewModels
             set
             {
                 SetProperty(ref _SelectedItem, value);
-                //var text = _SelectedItem?.Title;
-                //if (_history.Any() && _history.TryPeek(out var parent))
-                //{
-                //    text = string.Join(": ",[parent.Key.Title, _SelectedItem?.Title]);
-                //}
-                //SelectedText = text;
-                //MediaModel = _SelectedItem?.MediaSource!;
+                SelectedText = _SelectedItem?.Title;
             }
         }
         public bool IsWaitLoad 
@@ -163,10 +156,8 @@ namespace AvpMediaPlayer.UI.ViewModels
             });
         }
         public bool IsPrevVisible => _history.Any();
-        public RelayCommand OnPrevRoot { get; }
-        public RibbonViewModel? RibbonViewModel { get; }
-       
-        private void OnRibbonButtonClick(RibbonModel? model)
+        
+        internal protected void OnRibbonButtonClick(RibbonModel? model)
         {
             switch(model?.Action)
             {

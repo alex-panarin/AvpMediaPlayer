@@ -34,7 +34,6 @@ namespace AvpMediaPlayer.UI.Models
         public RibbonModel((string, string, string) val, Action<RibbonModel> command)
         {
             ButtonClick = new(b => command(b!));
-
             (Action, ImageKey, ToolTip) = val;
         }
 

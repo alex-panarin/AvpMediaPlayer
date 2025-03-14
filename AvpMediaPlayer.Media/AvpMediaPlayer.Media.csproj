@@ -7,6 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="ManagedBass.FftSignalProvider" Version="1.0.1" />
+    <PackageReference Include="ManagedBass.Fx" Version="3.1.1" />
+    <PackageReference Include="ManagedBass.Mix" Version="3.1.1" />
+    <PackageReference Include="TagLibSharp" Version="2.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AvpMediaPlayer.Core\AvpMediaPlayer.Core.csproj" />
     <ProjectReference Include="..\BassDlls\BassDlls.csproj" />
   </ItemGroup>
 
