@@ -1,0 +1,77 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	
+	<Design.PreviewWith>
+		<Border Padding="40"
+			    Background="Black"/>
+	</Design.PreviewWith>
+
+	<!-- BUTTON MIN ROUNDED -->
+	<Style Selector="Button.btnMin /template/ ContentPresenter">
+		<Setter Property="CornerRadius" Value="10" />
+		<Setter Property="BorderThickness" Value="0"/>
+		<Setter Property="Margin" Value="4"/>
+		<Setter Property="Background" Value="#3d3d3d"/>
+		<Setter Property="Width" Value="20"/>
+		<Setter Property="Height" Value="20"/>
+	</Style>
+	<Style Selector="Button.btnMin:pointerover /template/ ContentPresenter">
+		<Setter Property="BorderThickness" Value="0" />
+		<Setter Property="Background" Value="#505050"/>
+	</Style>
+	<!--BUTTON ROUND-->
+	<Style Selector="Button.btn /template/ ContentPresenter">
+		<Setter Property="CornerRadius" Value="16" />
+		<Setter Property="BorderThickness" Value="0"/>
+		<Setter Property="Margin" Value="5,0"/>
+		<Setter Property="Background" Value="#3d3d3d"/>
+		<Setter Property="Width" Value="32"/>
+		<Setter Property="Height" Value="32"/>
+	</Style>
+	<Style Selector="Button.btn:pointerover /template/ ContentPresenter">
+		<Setter Property="BorderThickness" Value="0" />
+		<Setter Property="Background" Value="#505050"/>
+	</Style>
+	<Style Selector="Button.btn > PathIcon">
+		<Setter Property="Foreground" Value="Coral" />
+		<Setter Property="VerticalAlignment" Value="Stretch" />
+		<Setter Property="HorizontalAlignment" Value="Stretch" />
+		<Setter Property="Background" Value="Transparent" />
+	</Style>
+	<Style Selector="Button.btn:pointerover > PathIcon">
+		<Setter Property="RenderTransform" Value="scale(1.1, 1.1)"/>
+	</Style>
+	<Style Selector="Button.isDisabled /template/ ContentPresenter:disabled">
+		<Setter Property="Background" Value="#505050"/>
+	</Style>
+	
+	<!--SEPARATOR-->
+	<Style Selector="Button.sep /template/ ContentPresenter">
+		<Setter Property="CornerRadius" Value="4" />
+		<Setter Property="BorderThickness" Value="0"/>
+		<Setter Property="Margin" Value="5,0"/>
+		<Setter Property="Background" Value="#3d3d3d"/>
+		<Setter Property="Width" Value="8"/>
+		<Setter Property="Height" Value="32"/>
+		<Setter Property="HorizontalAlignment" Value="Center"/>
+	</Style>
+	
+	<!-- BORDER -->
+	<Style Selector="Border.coral">
+		<Setter Property="BorderBrush" Value="Coral"/>
+		<Setter Property="Background" Value="Transparent"/>
+		<Setter Property="Margin" Value="4"/>
+	</Style>
+	<Style Selector="Border.thin">
+		<Setter Property="BorderThickness" Value="2"/>
+		<Setter Property="CornerRadius" Value="10"/>
+	</Style>
+	<Style Selector="Border.fat">
+		<Setter Property="BorderThickness" Value="4"/>
+		<Setter Property="CornerRadius" Value="20"/>
+	</Style>
+	<Style Selector="Border.light">
+		<Setter Property="BorderThickness" Value="2"/>
+		<Setter Property="CornerRadius" Value="8"/>
+	</Style>
+</Styles>
