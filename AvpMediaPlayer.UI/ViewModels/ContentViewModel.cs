@@ -161,7 +161,7 @@ namespace AvpMediaPlayer.UI.ViewModels
         {
             switch(model?.Action)
             {
-                case RibbonModel.Back:
+                case RibbonModel.List:
                     //OnPrevRoot.Execute(null);
                     break;
                 case RibbonModel.Stop:

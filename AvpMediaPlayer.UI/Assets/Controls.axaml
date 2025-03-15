@@ -41,6 +41,22 @@
 	<Style Selector="Button.btn:pointerover > PathIcon">
 		<Setter Property="RenderTransform" Value="scale(1.1, 1.1)"/>
 	</Style>
+	<!--BUTTON SQUARE ROUNDED-->
+	<Style Selector="Button.SQbtn /template/ ContentPresenter">
+		<Setter Property="CornerRadius" Value="6" />
+		<Setter Property="BorderThickness" Value="0"/>
+		<Setter Property="Width" Value="34"/>
+		<Setter Property="Height" Value="34"/>
+	</Style>
+	<Style Selector="Button.SQbtn > PathIcon">
+		<Setter Property="Foreground" Value="Coral" />
+		<Setter Property="VerticalAlignment" Value="Center" />
+		<Setter Property="HorizontalAlignment" Value="Center" />
+		<Setter Property="Width" Value="26"/>
+		<Setter Property="Height" Value="26"/>
+		<Setter Property="Background" Value="Transparent" />
+	</Style>
+	<!--BUTTON DISABLED-->
 	<Style Selector="Button.isDisabled /template/ ContentPresenter:disabled">
 		<Setter Property="Background" Value="#505050"/>
 	</Style>
@@ -51,8 +67,9 @@
 		<Setter Property="BorderThickness" Value="0"/>
 		<Setter Property="Margin" Value="5,0"/>
 		<Setter Property="Background" Value="#3d3d3d"/>
-		<Setter Property="Width" Value="8"/>
+		<Setter Property="Width" Value="2"/>
 		<Setter Property="Height" Value="32"/>
+		<Setter Property="MinWidth" Value="2"/>
 		<Setter Property="HorizontalAlignment" Value="Center"/>
 	</Style>
 	

@@ -12,13 +12,13 @@ namespace AvpMediaPlayer.UI.Models
         public const string Next =  "next";
         public const string Prev =  "prev";
         public const string Pause = "pause";
-        public const string Back =  "back";
+        public const string List =  "back";
         public const string Show =  "show";
         public const string Separator = "separator";
 
         public static (string, string, string)[] Buttons =
         {
-            (Back, "chevron_left_regular", "Возврат"),
+            (List, "chevron_left_regular", "Возврат"),
             (Separator, "", ""),
             (Stop, "stop_regular", "Стоп"),
             (Play, "play_regular", "Играть"),

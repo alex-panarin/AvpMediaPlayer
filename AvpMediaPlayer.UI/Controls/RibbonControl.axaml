@@ -20,20 +20,21 @@
 			<ItemsControl.ItemsPanel>
 				<ItemsPanelTemplate>
 					<StackPanel Orientation="Horizontal"
-								HorizontalAlignment="Stretch"/>
+								HorizontalAlignment="Stretch"
+								Margin="6,0"
+								Spacing="2"/>
 				</ItemsPanelTemplate>
 			</ItemsControl.ItemsPanel>
 			<ItemsControl.ItemTemplate>
 				<DataTemplate>
 					<Button x:DataType="model:RibbonModel"
 							Classes.sep="{Binding IsSeparator}"
+							Classes="SQbtn"
 							Name="{Binding Action}"
 							Command="{Binding ButtonClick}"
 							CommandParameter="{Binding .}"
 							IsEnabled="{Binding IsEnabled}"
 							IsVisible="{Binding IsVisible}"
-							ToolTip.HorizontalOffset="5"
-							ToolTip.Placement="BottomEdgeAlignedRight"
 							ToolTip.Tip="{Binding ToolTip}"
 							ToolTip.ServiceEnabled="{Binding !IsSeparator}">
 						<PathIcon Data="{Binding ImageKey, Converter={StaticResource PathIconConverter}}"/>

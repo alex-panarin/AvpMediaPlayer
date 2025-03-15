@@ -17,7 +17,7 @@ namespace AvpMediaPlayer.UI.ViewModels
         private string? _SelectedText;
         private EmptyState _IsEmpty;
         private ContentUIModel? _SelectedItem;
-        private readonly string[] _allwaysVisible = { RibbonModel.Back };
+        private readonly string[] _allwaysVisible = { RibbonModel.List };
 
         public RibbonViewModel()
         {
@@ -60,7 +60,7 @@ namespace AvpMediaPlayer.UI.ViewModels
 
             Buttons.ForEach(b =>
             {
-                //if (b.Action != RibbonModel.Back)
+                //if (b.Action != RibbonModel.List)
                     b.IsVisible = visible;
             });
 
