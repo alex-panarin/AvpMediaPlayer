@@ -15,13 +15,20 @@ namespace AvpMediaPlayer.UI.ViewModels
     public class RibbonViewModel : ObservableObject
     {
         private string? _SelectedText;
-        private EmptyState _IsEmpty;
         private ContentUIModel? _SelectedItem;
-        private readonly string[] _allwaysVisible = { RibbonModel.List };
+        private readonly string[] _allwaysVisible =
+        {
+            RibbonModel.List,
+            RibbonModel.AddFiles,
+            RibbonModel.AddFolder,
+            RibbonModel.Open
+        };
+        private readonly IEnumerable<RibbonModel> _changableButtons;
 
         public RibbonViewModel()
         {
             Buttons = [];
+            _changableButtons = [];
         }
         public RibbonViewModel(Action<RibbonModel?> buttonClick)
         {
@@ -29,7 +36,16 @@ namespace AvpMediaPlayer.UI.ViewModels
             {
                 return new RibbonModel(b, buttonClick);
             })];
-            
+
+            Buttons
+                .ForEach((b, i) =>
+                {
+                    b.IsVisible = i == 1 || _allwaysVisible.Any(a => a == b.Action);
+                });
+
+            _changableButtons = Buttons
+                .Where(b => b.IsVisible != true);
+
             ChangeButtons();
         }
         public ContentUIModel? SelectedItem 
@@ -39,33 +55,31 @@ namespace AvpMediaPlayer.UI.ViewModels
             {
                 SetProperty(ref _SelectedItem, value);
                 SelectedText = _SelectedItem?.Title;
+                ChangeButtons();
             }
         }
-        public EmptyState IsEmpty { get => _IsEmpty; set => SetProperty(ref _IsEmpty, value); }
-        public string? SelectedText { get => _SelectedText; private set => SetProperty(ref _SelectedText, value); }
+        public string? SelectedText 
+        { 
+            get => _SelectedText; 
+            private set => SetProperty(ref _SelectedText, value); 
+        }
         public ObservableCollection<RibbonModel> Buttons { get; }
         private void ChangeButtons()
         {
             var visible = SelectedItem is not null
                 && SelectedItem.IsDirectory == false;
             
-            visible = true;
-
-            var allButtons = new Func<bool>(() => Buttons
-                .Where(b => _allwaysVisible.Any(a => a == b.Action ) == false)
+            var allButtons = new Func<bool>(() => _changableButtons
                 .All(b => b.IsVisible == visible));
 
-            //if (allButtons())
-            //    return;
+            if (allButtons()) return;
 
-            Buttons.ForEach(b =>
+            _changableButtons.ForEach(b =>
             {
-                //if (b.Action != RibbonModel.List)
-                    b.IsVisible = visible;
+                 b.IsVisible = visible;
             });
 
-            IsEmpty = allButtons() && visible ? EmptyState.Full : EmptyState.Single;
-
+            //IsEmpty = allButtons() && visible ? EmptyState.Full : EmptyState.Single;
             OnPropertyChanged(nameof(Buttons));
         }
     }

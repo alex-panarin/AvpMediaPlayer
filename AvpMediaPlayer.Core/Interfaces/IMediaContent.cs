@@ -4,7 +4,7 @@ namespace AvpMediaPlayer.Core.Interfaces
 {
     public interface IMediaContent
     {
-        IMediaTag? MediaTag { get; }
+        IMediaTag? Tag { get; }
         Content? Content { get; }
         string? Description { get; }
     }

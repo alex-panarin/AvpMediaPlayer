@@ -1,0 +1,128 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:vm="using:AvpMediaPlayer.UI.ViewModels"
+		xmlns:model="using:AvpMediaPlayer.Core.Models"
+        mc:Ignorable="d" d:DesignWidth="640" d:DesignHeight="480"
+        x:Class="AvpMediaPlayer.UI.Views.MediaContainerWindow"
+		x:DataType="vm:MediaContainerViewModel"
+        Title="MediaContainerWindow"
+		Background="Transparent"
+		BorderThickness="0"
+		BorderBrush="Transparent"
+		TransparencyLevelHint="Transparent"
+		ExtendClientAreaToDecorationsHint="True"
+		ExtendClientAreaTitleBarHeightHint="-1"
+		ExtendClientAreaChromeHints="NoChrome"
+		WindowState="Normal"
+		Width="640"
+		Height="480"
+		CanResize="False"
+		Topmost="True">
+	
+	<Window.Styles>
+		<Style Selector="TextBlock.list">
+			<Setter Property="Foreground" Value="Coral"/>
+			<Setter Property="HorizontalAlignment" Value="Center"/>
+			<Setter Property="TextAlignment" Value="Center"/>
+		</Style>
+		<Style Selector="ListBox.items > ListBoxItem">
+			<Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+			<Setter Property="VerticalContentAlignment" Value="Stretch"/>
+			<Setter Property="ClipToBounds" Value="True"/>
+			<Setter Property="Margin" Value="0"/>
+			<Setter Property="Padding" Value="0"/>
+			<Setter Property="Height" Value="32"/>
+		</Style>
+		<Style Selector="ListBox.items > ListBoxItem /template/ContentPresenter:focus">
+			<Setter Property="Background" Value="Beige"/>
+			<Setter Property="CornerRadius" Value="6"/>
+			<Setter Property="Margin" Value="1"/>
+		</Style>
+		<Style Selector="ListBox.items > ListBoxItem /template/ContentPresenter:focus-visible">
+			<Setter Property="Background" Value="Beige"/>
+			<Setter Property="CornerRadius" Value="6"/>
+			<Setter Property="Margin" Value="1"/>
+		</Style>
+		<Style Selector="ListBox.items > ListBoxItem /template/ContentPresenter:focus-within">
+			<Setter Property="Background" Value="Beige"/>
+			<Setter Property="CornerRadius" Value="6"/>
+			<Setter Property="Margin" Value="1"/>
+		</Style>
+		<Style Selector="ListBox.items > ListBoxItem:selected /template/ContentPresenter">
+			<Setter Property="Background" Value="Beige"/>
+			<Setter Property="CornerRadius" Value="6"/>
+			<Setter Property="Margin" Value="1"/>
+		</Style>
+		<Style Selector="ListBox.items">
+			<Setter Property="AutoScrollToSelectedItem" Value="True"/>
+			<Setter Property="BackgroundSizing" Value="InnerBorderEdge"/>
+		</Style>
+	</Window.Styles>
+	
+	<Panel>
+		<Border Grid.Row="0"
+				BorderBrush="Coral"
+				BorderThickness="2"
+				CornerRadius="6"
+				Opacity="1">
+			<Grid RowDefinitions="28, *">
+				<Grid ColumnDefinitions="*, 40, 40, 120"
+					  Grid.Row="0"
+					  Margin="4"
+					  VerticalAlignment="Center">
+					<TextBlock Grid.Column="0" 
+							   Classes="list"
+							   Text="Наименование"/>
+					<PathIcon Grid.Column="1"
+							  Data="{StaticResource music_regular}"
+							  Foreground="Coral"
+							  Width="14"
+							  Height="14"/>
+					<TextBlock Grid.Column="2"
+							   Classes="list"
+							   Text="Тип"/>
+					<TextBlock Grid.Column="3" 
+							   Classes="list"
+							   Text="Время"/>
+				</Grid>
+				<ListBox Grid.Row="1"
+						 Classes="items"
+						 ItemsSource="{Binding Items}"
+						 Margin="2"
+						 Background="Transparent"
+						 SelectedItem="{Binding SelectedItem}"
+						 ScrollViewer.VerticalScrollBarVisibility="Auto"
+						 CornerRadius="6">
+					<ListBox.ItemTemplate>
+						<DataTemplate x:DataType="model:ContentUIModel">
+							<Border CornerRadius="6"
+									BorderBrush="Coral"
+									BorderThickness="1"
+									Background="Transparent"
+									Height="30">
+								<Grid ColumnDefinitions="*, 40, 40, 120">
+									<TextBlock Grid.Column="0"
+											   Classes="list"
+											   Text="{Binding Title}"/>
+									<PathIcon Grid.Column="1"
+											  Data="{StaticResource music_regular}"
+											  Foreground="Coral"
+											  Width="14"
+											  Height="14"/>
+									<TextBlock Grid.Column="2"
+											   Classes="list"
+											   Text="{Binding Type}"/>
+									<TextBlock Grid.Column="3"
+											   Classes="list"
+											   Text="{Binding Duration}"/>
+								</Grid>
+							</Border>
+						</DataTemplate>
+					</ListBox.ItemTemplate>				
+				</ListBox>
+			</Grid>
+		</Border>
+	</Panel>
+</Window>

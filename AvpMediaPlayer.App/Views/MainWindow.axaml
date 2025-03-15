@@ -33,14 +33,16 @@
 					BorderBrush="Coral"
 					BorderThickness="2,2,2,0"
 					CornerRadius="6,6,0,0"
-					Opacity="0.7">
+					Opacity="1">
 				<Grid ColumnDefinitions="*, 100">
 					<TextBlock HorizontalAlignment="Left"
 							   VerticalAlignment="Center"
 							   Margin="4,0"
-							   TextAlignment="End">
+							   TextAlignment="End"
+							   Foreground="Coral">
 							<PathIcon Data="{StaticResource music_regular}"
-								  HorizontalAlignment="Left"/>
+									  HorizontalAlignment="Left"
+									  Foreground="Coral"/>
 							<Label Content="lABEEL cONTENT">
 						</Label>
 					</TextBlock>
@@ -60,11 +62,11 @@
 					BorderBrush="Coral"
 					BorderThickness="2,0,2,2"
 					CornerRadius="0,0,6,6"
-					Opacity="0.7">
+					Opacity="1">
 					<Grid RowDefinitions="1, *">
 						<Line Grid.Row="0"
-							  Opacity="0.5" 
-							  Stroke="Wheat"
+							  Opacity="1" 
+							  Stroke="Coral"
 							  StartPoint="2,0"
 							  Height="1"
 							  EndPoint="634, 0"

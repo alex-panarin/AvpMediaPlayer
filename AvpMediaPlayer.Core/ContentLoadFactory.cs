@@ -1,4 +1,4 @@
-﻿using AvpMediaPlayer.Core.Interfaces;
+﻿ using AvpMediaPlayer.Core.Interfaces;
 using AvpMediaPlayer.Core.Models;
 
 namespace AvpMediaPlayer.Core
@@ -21,7 +21,7 @@ namespace AvpMediaPlayer.Core
                 this._contentFactory = contextFactory;
                 Filter = filter ?? new(c => c != null);
             }
-
+           
             public async IAsyncEnumerable<ContentUIModel> Get()
             {
                 await CheckLoadContent();

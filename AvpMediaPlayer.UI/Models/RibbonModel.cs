@@ -14,11 +14,18 @@ namespace AvpMediaPlayer.UI.Models
         public const string Pause = "pause";
         public const string List =  "back";
         public const string Show =  "show";
+        public const string Open = "open";
+        public const string AddFolder = "addfolder";
+        public const string AddFiles = "addfiles";
         public const string Separator = "separator";
 
         public static (string, string, string)[] Buttons =
         {
-            (List, "chevron_left_regular", "Возврат"),
+            (List, "chevron_down_regular", "Список"),
+            (Separator, "", ""),
+            (Open, "folder_open_regular", "Открыть"),
+            (AddFolder, "folder_add_regular", "Папку"),
+            (AddFiles, "collections_add_regular", "Файлы"),
             (Separator, "", ""),
             (Stop, "stop_regular", "Стоп"),
             (Play, "play_regular", "Играть"),
@@ -36,16 +43,21 @@ namespace AvpMediaPlayer.UI.Models
             ButtonClick = new(b => command(b!));
             (Action, ImageKey, ToolTip) = val;
         }
-
         public string? ImageKey { get; }
         public string? Action { get; }
         public string? ToolTip { get; }
         public bool IsSeparator => Action == Separator;
         public RelayCommand<RibbonModel> ButtonClick { get; }
-        public bool? IsEnabled { get => _IsEnabled; internal set => SetProperty(ref _IsEnabled, value); }
-        public bool? IsVisible { get => _IsVisible; internal set => SetProperty(ref _IsVisible, value); }
-        public Action<bool>? ShowPopup { get; internal set; }
-
+        public bool? IsEnabled
+        { 
+            get => _IsEnabled; 
+            internal set => SetProperty(ref _IsEnabled, value); 
+        }
+        public bool? IsVisible 
+        { 
+            get => _IsVisible; 
+            internal set => SetProperty(ref _IsVisible, value); 
+        }
         public event PropertyChangedEventHandler? PropertyChanged;
         private void SetProperty<T>(ref T property, T value, [CallerMemberName] string? propName = null)
         {

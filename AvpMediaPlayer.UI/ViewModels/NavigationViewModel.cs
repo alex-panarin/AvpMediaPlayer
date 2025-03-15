@@ -2,6 +2,7 @@
 using Avalonia.Controls.ApplicationLifetimes;
 using AvpMediaPlayer.Core.Models;
 using AvpMediaPlayer.UI.Models;
+using AvpMediaPlayer.UI.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -10,11 +11,12 @@ namespace AvpMediaPlayer.UI.ViewModels
     public class NavigationViewModel : ObservableObject
     {
         private ContentUIModel? _SelectedItem;
+        private MediaContainerWindow? _listWindow;
 
         public NavigationViewModel()
         {
             Ribbon = new(OnButtonClick);
-            Container = new();
+            Container = new(OnSelectedChanged);
             CloseApp = new(() => 
             {
                 if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
@@ -31,7 +33,6 @@ namespace AvpMediaPlayer.UI.ViewModels
             {
                 SetProperty(ref _SelectedItem, value);
                 Ribbon.SelectedItem = _SelectedItem;
-                Container.SelectedItem = _SelectedItem;
             } 
         }
         public RelayCommand CloseApp { get; }
@@ -40,6 +41,8 @@ namespace AvpMediaPlayer.UI.ViewModels
             switch (model?.Action)
             {
                 case RibbonModel.List:
+                    _listWindow ??= new MediaContainerWindow() { DataContext = Container };
+                    _listWindow.IsVisible = !_listWindow.IsVisible;
                     break;
                 case RibbonModel.Stop:
                     break;
@@ -49,10 +52,21 @@ namespace AvpMediaPlayer.UI.ViewModels
                     break;
                 case RibbonModel.Show:
                     break;
+                case RibbonModel.AddFiles:
+                    break;
+                case RibbonModel.AddFolder:
+                    break;
+                case RibbonModel.Open:
+                    break;
+                case RibbonModel.Next:
+                    break;
+                case RibbonModel.Prev:
+                    break;
                 default:
                     break;
             }
         }
-
+        private void OnSelectedChanged(ContentUIModel? item)
+            => SelectedItem = item;
     }
 }
