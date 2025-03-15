@@ -3,7 +3,8 @@
         xmlns:vm="using:AvpMediaPlayer.App.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="640" d:DesignHeight="480"
+		xmlns:controls="using:AvpMediaPlayer.UI.Controls"
+        mc:Ignorable="d" d:DesignWidth="640" d:DesignHeight="80"
         x:Class="AvpMediaPlayer.App.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
@@ -11,29 +12,47 @@
 		Background="Transparent"
 		BorderThickness="0"
 		BorderBrush="Transparent"
-		TransparencyLevelHint="AcrylicBlur"
+		TransparencyLevelHint="Transparent"
 		ExtendClientAreaToDecorationsHint="True"
 		ExtendClientAreaTitleBarHeightHint="-1"
 		ExtendClientAreaChromeHints="NoChrome"
 		WindowState="Normal"
 		WindowStartupLocation="CenterScreen"
 		Width="640"
-		Height="480">
+		Height="80"
+		CanResize="False">
 
     <Design.DataContext>
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-	<Panel>
-		<Grid RowDefinitions="40, *">
+	<Panel Name="panel">
+		<Grid RowDefinitions="30, 40">
 			<Border Grid.Row="0"
 					BorderBrush="Coral"
-					BorderThickness="2"
-					CornerRadius="10"
-					Margin="5">
-
+					BorderThickness="2,2,2,0"
+					CornerRadius="6,6,0,0"
+					Opacity="0.5">
+				
 			</Border>
 			<Border Grid.Row="1"
+					BorderBrush="Coral"
+					BorderThickness="2,0,2,2"
+					CornerRadius="0,0,6,6"
+					Opacity="0.5">
+					<Grid RowDefinitions="1, *">
+						<Line Grid.Row="0"
+							  Opacity="0.5" 
+							  Stroke="Wheat"
+							  StartPoint="4,0"
+							  Height="1"
+							  EndPoint="632, 0"
+							  VerticalAlignment="Top"/>
+						<controls:RibbonControl Grid.Row="1"
+												DataContext="{Binding Navigation.Ribbon}"/>
+					</Grid>
+				</Border>
+			<!--<Border Grid.Row="1"
 					BorderBrush="Black"
 					BorderThickness="1"
 					CornerRadius="10"
@@ -51,7 +70,7 @@
 						</GradientStops>
 					</LinearGradientBrush>
 				</Border.Background>
-			</Border>
+			</Border>-->
 		</Grid>
 	</Panel>
 </Window>

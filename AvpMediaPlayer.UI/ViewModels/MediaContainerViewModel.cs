@@ -7,6 +7,7 @@ namespace AvpMediaPlayer.UI.ViewModels
     {
         public MediaContainerViewModel()
         {
+            
         }
 
         public ContentUIModel? SelectedItem { get; internal set; }

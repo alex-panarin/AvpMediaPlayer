@@ -1,5 +1,4 @@
-﻿using AvpMediaPlayer.UI.Models;
-using AvpMediaPlayer.UI.ViewModels;
+﻿using AvpMediaPlayer.UI.ViewModels;
 
 namespace AvpMediaPlayer.App.ViewModels
 {
@@ -9,6 +8,6 @@ namespace AvpMediaPlayer.App.ViewModels
         {
         }
 
-        
+        public NavigationViewModel Navigation { get; } = new();
     }
 }

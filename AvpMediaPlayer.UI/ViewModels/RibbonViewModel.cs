@@ -48,17 +48,19 @@ namespace AvpMediaPlayer.UI.ViewModels
         {
             var visible = SelectedItem is not null
                 && SelectedItem.IsDirectory == false;
+            
+            visible = true;
 
             var allButtons = new Func<bool>(() => Buttons
                 .Where(b => _allwaysVisible.Any(a => a == b.Action ) == false)
                 .All(b => b.IsVisible == visible));
 
-            if (allButtons())
-                return;
+            //if (allButtons())
+            //    return;
 
             Buttons.ForEach(b =>
             {
-                if (b.Action != RibbonModel.Back)
+                //if (b.Action != RibbonModel.Back)
                     b.IsVisible = visible;
             });
 

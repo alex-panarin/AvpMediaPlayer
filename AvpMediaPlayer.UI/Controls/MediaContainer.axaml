@@ -2,9 +2,45 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:vm="using:AvpMediaPlayer.UI.ViewModels"
              mc:Ignorable="d" d:DesignWidth="640" d:DesignHeight="480"
              x:Class="AvpMediaPlayer.UI.Controls.MediaContainer"
-			 Background="Transparent"
-			 CornerRadius="10">
-  
+			 Background="Transparent">
+
+	<Design.DataContext>
+		<vm:MediaContainerViewModel/>
+	</Design.DataContext>
+	
+	<Panel Margin="2">
+		<Expander VerticalAlignment="Top"
+				  HorizontalAlignment="Stretch"
+				  CornerRadius="10">
+			<Expander.HeaderTemplate>
+				<DataTemplate>
+					<StackPanel Orientation="Horizontal">
+						
+					</StackPanel>
+				</DataTemplate>
+			</Expander.HeaderTemplate>
+				<Border BorderBrush="Black"
+						BorderThickness="1"
+						CornerRadius="10"
+						Opacity="0.5"
+						Height="400">
+					<PathIcon Data="{StaticResource music_regular_2}"
+							  Width="80"
+							  Height="80"
+							  Opacity="0.2"/>
+					<Border.Background>
+						<LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+							<GradientStops>
+								<GradientStop Color="Black" Offset="0"/>
+								<GradientStop Color="Transparent" Offset="1"/>
+							</GradientStops>
+						</LinearGradientBrush>
+					</Border.Background>
+				</Border>
+			
+		</Expander>	
+	</Panel>
 </UserControl>

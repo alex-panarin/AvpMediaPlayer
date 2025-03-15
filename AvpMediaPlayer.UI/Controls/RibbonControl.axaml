@@ -1,0 +1,46 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:vm="using:AvpMediaPlayer.UI.ViewModels"
+			 xmlns:model="using:AvpMediaPlayer.UI.Models"
+			 xmlns:convert="using:AvpMediaPlayer.UI.Converters"
+             mc:Ignorable="d" d:DesignWidth="636" d:DesignHeight="60"
+             x:Class="AvpMediaPlayer.UI.Controls.RibbonControl"
+			 x:DataType="vm:RibbonViewModel">
+	<Design.DataContext>
+		<vm:RibbonViewModel/>
+	</Design.DataContext>
+	
+	<UserControl.Resources>
+		<convert:PathIconConverter x:Key="PathIconConverter"/>
+	</UserControl.Resources>
+	<Panel>
+		<ItemsControl ItemsSource="{Binding Buttons}">
+			<ItemsControl.ItemsPanel>
+				<ItemsPanelTemplate>
+					<StackPanel Orientation="Horizontal"
+								HorizontalAlignment="Stretch"/>
+				</ItemsPanelTemplate>
+			</ItemsControl.ItemsPanel>
+			<ItemsControl.ItemTemplate>
+				<DataTemplate>
+					<Button x:DataType="model:RibbonModel"
+							Classes.sep="{Binding IsSeparator}"
+							Name="{Binding Action}"
+							Command="{Binding ButtonClick}"
+							CommandParameter="{Binding .}"
+							IsEnabled="{Binding IsEnabled}"
+							IsVisible="{Binding IsVisible}"
+							ToolTip.HorizontalOffset="5"
+							ToolTip.Placement="BottomEdgeAlignedRight"
+							ToolTip.Tip="{Binding ToolTip}"
+							ToolTip.ServiceEnabled="{Binding !IsSeparator}">
+						<PathIcon Data="{Binding ImageKey, Converter={StaticResource PathIconConverter}}"/>
+					</Button>
+				</DataTemplate>
+			</ItemsControl.ItemTemplate>
+		</ItemsControl>
+		
+	</Panel>
+</UserControl>
