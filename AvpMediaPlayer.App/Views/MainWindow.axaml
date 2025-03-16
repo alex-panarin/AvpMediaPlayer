@@ -12,7 +12,7 @@
 		Background="Transparent"
 		BorderThickness="0"
 		BorderBrush="Transparent"
-		TransparencyLevelHint="Transparent"
+		TransparencyLevelHint="AcrylicBlur"
 		ExtendClientAreaToDecorationsHint="True"
 		ExtendClientAreaTitleBarHeightHint="-1"
 		ExtendClientAreaChromeHints="NoChrome"

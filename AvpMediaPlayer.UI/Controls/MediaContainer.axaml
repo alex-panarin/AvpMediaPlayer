@@ -6,37 +6,82 @@
              mc:Ignorable="d" d:DesignWidth="640" d:DesignHeight="480"
              x:Class="AvpMediaPlayer.UI.Controls.MediaContainer"
 			 Background="Transparent">
+	<UserControl.Styles>
+		<Style Selector="SplitView.coral > Border">
+			<Setter Property="BorderBrush" Value="Coral"/>
+			<Setter Property="BorderThickness" Value="2"/>
+		</Style>
+		<Style Selector="Button.toggle /template/ ContentPresenter">
+			<Setter Property="CornerRadius" Value="0" />
+			<Setter Property="BorderThickness" Value="0"/>
+			<Setter Property="Background" Value="Transparent"/>
+		</Style>
+		<Style Selector="Button.toggle:pointerover /template/ ContentPresenter">
+			<Setter Property="BorderThickness" Value="0" />
+			<Setter Property="Background" Value="Transparent"/>
+		</Style>
+	</UserControl.Styles>
 	
-	<Panel Margin="2">
-		<Expander VerticalAlignment="Top"
-				  HorizontalAlignment="Stretch"
-				  CornerRadius="10">
-			<Expander.HeaderTemplate>
-				<DataTemplate>
-					<StackPanel Orientation="Horizontal">
-						
-					</StackPanel>
-				</DataTemplate>
-			</Expander.HeaderTemplate>
-				<Border BorderBrush="Black"
-						BorderThickness="1"
-						CornerRadius="10"
-						Opacity="0.5"
-						Height="400">
-					<PathIcon Data="{StaticResource music_regular_2}"
-							  Width="80"
-							  Height="80"
-							  Opacity="0.2"/>
-					<Border.Background>
-						<LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
-							<GradientStops>
-								<GradientStop Color="Black" Offset="0"/>
-								<GradientStop Color="Transparent" Offset="1"/>
-							</GradientStops>
-						</LinearGradientBrush>
-					</Border.Background>
+	<Panel>
+		<SplitView
+				Margin="6"
+				IsPaneOpen="{Binding IsPaneOpen}"
+				DisplayMode="CompactInline"
+				OpenPaneLength="440"
+				CompactPaneLength="40"
+				PaneBackground="#1e1e1e"
+				Background="#1e1e1e"
+				Opacity="0.7">
+			<SplitView.Pane>
+				<Border CornerRadius="6,0,0,6"
+						BorderThickness="2, 2, 0, 2">
+					<Grid ColumnDefinitions="40, *">
+						<StackPanel Margin="5"
+									Grid.Column="0"
+									Spacing="5"
+								Orientation="Vertical">
+							<Button Classes="toggle"
+									Command="{Binding OnOpenPanel}"
+									HorizontalAlignment="Left"
+									VerticalAlignment="Top">
+								<PathIcon Data="{StaticResource pane_close_regular}"
+										  HorizontalAlignment="Center"
+										  Foreground="Coral"/>
+							</Button>
+							<TextBlock
+								   Text="Список воспроизведения"
+								   Foreground="Coral"
+								   VerticalAlignment="Bottom"
+								   HorizontalAlignment="Center"
+								   Margin="0, 50, 0, 0"
+								   Width="{Binding $parent.Bounds.Height}">
+								<TextBlock.RenderTransform>
+									<RotateTransform Angle="270" />
+								</TextBlock.RenderTransform>
+							</TextBlock>
+						</StackPanel>
+
+						<Grid Grid.Column="1"
+							  Margin="0,5,5,5"
+							  RowDefinitions="30, *">
+							<TextBlock Text="{Binding SelectedText}"
+									   Grid.Row="0"
+									   Foreground="Coral"
+									   HorizontalAlignment="Stretch"
+									   TextAlignment="DetectFromContent"/>
+							<!--<ProgressBar
+										Foreground="Coral"
+										IsIndeterminate="True"
+										IsVisible="{Binding IsWaitLoad}"/>-->
+						</Grid>
+					</Grid>
 				</Border>
-			
-		</Expander>	
+			</SplitView.Pane>
+			<SplitView.Content>
+				<Border Background="#2d2d2d"
+						CornerRadius="0,10,10,00">
+				</Border>
+			</SplitView.Content>
+		</SplitView>
 	</Panel>
 </UserControl>

@@ -1,6 +1,7 @@
 ﻿using AvpMediaPlayer.Core.Models;
 using AvpMediaPlayer.Media.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 
 namespace AvpMediaPlayer.UI.ViewModels
@@ -9,6 +10,7 @@ namespace AvpMediaPlayer.UI.ViewModels
     {
         private readonly Action<ContentUIModel?> _onSelectedChanged;
         private ContentUIModel? _SelectedItem;
+        private bool _IsPaneOpen;
 
         public MediaContainerViewModel(Action<ContentUIModel?> onSelectedChanged)
         {
@@ -20,6 +22,8 @@ namespace AvpMediaPlayer.UI.ViewModels
             ];
             
             _onSelectedChanged = onSelectedChanged;
+
+            PaneOpen = new(() => IsPaneOpen = !IsPaneOpen);
         }
 
         public ContentUIModel? SelectedItem
@@ -33,5 +37,13 @@ namespace AvpMediaPlayer.UI.ViewModels
         }
 
         public ObservableCollection<ContentUIModel> Items { get; }
+
+        public RelayCommand PaneOpen { get; private set; }
+
+        private bool IsPaneOpen
+        {
+            get => _IsPaneOpen;
+            set => SetProperty(ref _IsPaneOpen, value);
+        }
     }
 }

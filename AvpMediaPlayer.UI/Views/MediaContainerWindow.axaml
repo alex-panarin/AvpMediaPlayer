@@ -36,13 +36,34 @@
 			<Setter Property="Height" Value="32"/>
 		</Style>
 		<Style Selector="ListBox.items > ListBoxItem:selected /template/ContentPresenter">
-			<Setter Property="Background" Value="Beige"/>
-			<!--<Setter Property="CornerRadius" Value="6"/>-->
+			<Setter Property="Background">
+				<SolidColorBrush Color="Gray" Opacity="0.7"/>
+			</Setter>
 			<Setter Property="Margin" Value="1"/>
 		</Style>
 		<Style Selector="ListBox.items">
 			<Setter Property="AutoScrollToSelectedItem" Value="True"/>
 			<Setter Property="BackgroundSizing" Value="InnerBorderEdge"/>
+		</Style>
+		<Style Selector="SplitView.coral > Border">
+			<Setter Property="BorderBrush" Value="Coral"/>
+			<Setter Property="BorderThickness" Value="2"/>
+		</Style>
+		<Style Selector="Button.toggle /template/ ContentPresenter">
+			<Setter Property="CornerRadius" Value="0" />
+			<Setter Property="BorderThickness" Value="0"/>
+			<Setter Property="Background" Value="Transparent"/>
+			<Setter Property="ToolTip.Tip" Value="Открыть"/>
+		</Style>
+		<Style Selector="Button.toggleopen > PathIcon">
+			<Setter Property="RenderTransform">
+				<RotateTransform Angle="180"/>
+			</Setter>
+			<Setter Property="ToolTip.Tip" Value="Закрыть"/> 
+		</Style>
+		<Style Selector="Button.toggle:pointerover /template/ ContentPresenter">
+			<Setter Property="BorderThickness" Value="0" />
+			<Setter Property="Background" Value="#3d3d3d"/>
 		</Style>
 	</Window.Styles>
 	
@@ -85,41 +106,95 @@
 							   Classes="list"
 							   Text="Время"/>
 				</Grid>
-				<ListBox Grid.Row="1"
-						 Classes="items"
-						 ItemsSource="{Binding Items}"
-						 Margin="2"
-						 Background="Transparent"
-						 SelectedItem="{Binding SelectedItem}"
-						 ScrollViewer.VerticalScrollBarVisibility="Auto"
-						 CornerRadius="6">
-					<ListBox.ItemTemplate>
-						<DataTemplate x:DataType="model:ContentUIModel">
-							<Border CornerRadius="0"
-									BorderBrush="Coral"
-									BorderThickness="0, 1, 0, 1"
-									Background="Transparent"
-									Height="30">
-								<Grid ColumnDefinitions="*, 40, 40, 120">
-									<TextBlock Grid.Column="0"
-											   Classes="list"
-											   Text="{Binding Title}"/>
-									<PathIcon Grid.Column="1"
-											  Data="{StaticResource music_regular}"
-											  Foreground="Coral"
-											  Width="14"
-											  Height="14"/>
-									<TextBlock Grid.Column="2"
-											   Classes="list"
-											   Text="{Binding Type}"/>
-									<TextBlock Grid.Column="3"
-											   Classes="list"
-											   Text="{Binding Duration}"/>
+				<SplitView Grid.Row="1"
+						   Margin="2"
+						   IsPaneOpen="{Binding IsPaneOpen}"
+						   DisplayMode="CompactInline"
+						   OpenPaneLength="220"
+						   CompactPaneLength="40">
+					<SplitView.Pane>
+							<Grid ColumnDefinitions="40, *">
+								<StackPanel Grid.Column="0"
+											Spacing="5"
+											Orientation="Vertical">
+									
+									<Button Classes="toggle"
+											Classes.toggleopen="{Binding IsPaneOpen}"
+											Command="{Binding PaneOpen}"
+											HorizontalAlignment="Left"
+											VerticalAlignment="Top">
+										<PathIcon Data="{StaticResource pane_close_regular}"
+												  HorizontalAlignment="Center"
+												  Foreground="Coral"/>
+									</Button>
+									
+									<TextBlock
+										   Text="Списки воспроизведения"
+										   Foreground="Coral"
+										   VerticalAlignment="Bottom"
+										   HorizontalAlignment="Center"
+										   Margin="0, 50, 0, 0"
+										   Width="{Binding $parent.Bounds.Height}">
+										<TextBlock.RenderTransform>
+											<RotateTransform Angle="270" />
+										</TextBlock.RenderTransform>
+									</TextBlock>
+									
+								</StackPanel>
+								<Grid Grid.Column="1"
+									  Margin="0,5,5,5"
+									  RowDefinitions="30, *">
+									
+									<TextBlock Text="{Binding SelectedText}"
+											   Grid.Row="0"
+											   Foreground="Coral"
+											   HorizontalAlignment="Stretch"
+											   TextAlignment="DetectFromContent"/>
+									<!--<ProgressBar
+										Foreground="Coral"
+										IsIndeterminate="True"
+										IsVisible="{Binding IsWaitLoad}"/>-->
 								</Grid>
-							</Border>
-						</DataTemplate>
-					</ListBox.ItemTemplate>				
-				</ListBox>
+							</Grid>
+					</SplitView.Pane>
+					<SplitView.Content>
+						<ListBox
+								Classes="items"
+								ItemsSource="{Binding Items}"
+								Margin="2"
+								Background="Transparent"
+								SelectedItem="{Binding SelectedItem}"
+								ScrollViewer.VerticalScrollBarVisibility="Auto"
+								CornerRadius="6">
+							<ListBox.ItemTemplate>
+								<DataTemplate x:DataType="model:ContentUIModel">
+									<Border CornerRadius="0"
+											BorderBrush="Coral"
+											BorderThickness="0, 1, 0, 1"
+											Background="Transparent"
+											Height="30">
+										<Grid ColumnDefinitions="*, 40, 40, 120">
+											<TextBlock Grid.Column="0"
+														Classes="list"
+														Text="{Binding Title}"/>
+											<PathIcon Grid.Column="1"
+														Data="{StaticResource music_regular}"
+														Foreground="Coral"
+														Width="14"
+														Height="14"/>
+											<TextBlock Grid.Column="2"
+														Classes="list"
+														Text="{Binding Type}"/>
+											<TextBlock Grid.Column="3"
+														Classes="list"
+														Text="{Binding Duration}"/>
+										</Grid>
+									</Border>
+								</DataTemplate>
+							</ListBox.ItemTemplate>
+						</ListBox>
+					</SplitView.Content>
+				</SplitView>
 			</Grid>
 		</Border>
 	</Panel>
