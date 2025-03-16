@@ -6,10 +6,6 @@
              mc:Ignorable="d" d:DesignWidth="640" d:DesignHeight="480"
              x:Class="AvpMediaPlayer.UI.Controls.MediaContainer"
 			 Background="Transparent">
-
-	<Design.DataContext>
-		<vm:MediaContainerViewModel/>
-	</Design.DataContext>
 	
 	<Panel Margin="2">
 		<Expander VerticalAlignment="Top"

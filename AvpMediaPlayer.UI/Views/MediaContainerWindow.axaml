@@ -35,21 +35,6 @@
 			<Setter Property="Padding" Value="0"/>
 			<Setter Property="Height" Value="32"/>
 		</Style>
-		<!--<Style Selector="ListBox.items > ListBoxItem /template/ContentPresenter:focus">
-			<Setter Property="Background" Value="Beige"/>
-			<Setter Property="CornerRadius" Value="6"/>
-			<Setter Property="Margin" Value="1"/>
-		</Style>
-		<Style Selector="ListBox.items > ListBoxItem /template/ContentPresenter:focus-visible">
-			<Setter Property="Background" Value="Beige"/>
-			<Setter Property="CornerRadius" Value="6"/>
-			<Setter Property="Margin" Value="1"/>
-		</Style>
-		<Style Selector="ListBox.items > ListBoxItem /template/ContentPresenter:focus-within">
-			<Setter Property="Background" Value="Beige"/>
-			<Setter Property="CornerRadius" Value="6"/>
-			<Setter Property="Margin" Value="1"/>
-		</Style>-->
 		<Style Selector="ListBox.items > ListBoxItem:selected /template/ContentPresenter">
 			<Setter Property="Background" Value="Beige"/>
 			<!--<Setter Property="CornerRadius" Value="6"/>-->
@@ -62,11 +47,24 @@
 	</Window.Styles>
 	
 	<Panel>
+		<PathIcon Data="{StaticResource music_regular_2}"
+						  Width="80"
+						  Height="80"
+						  Opacity="0.2"/>
 		<Border Grid.Row="0"
 				BorderBrush="Coral"
 				BorderThickness="2"
 				CornerRadius="6"
 				Opacity="1">
+			<Border.Background>
+				<LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+					<GradientStops>
+						<GradientStop Color="Black" Offset="0"/>
+						<GradientStop Color="Transparent" Offset="1"/>
+					</GradientStops>
+				</LinearGradientBrush>
+			</Border.Background>
+		
 			<Grid RowDefinitions="28, *">
 				<Grid ColumnDefinitions="*, 40, 40, 120"
 					  Grid.Row="0"
