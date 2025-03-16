@@ -68,8 +68,9 @@
 		<Setter Property="Margin" Value="5,0"/>
 		<Setter Property="Background" Value="#3d3d3d"/>
 		<Setter Property="Width" Value="2"/>
-		<Setter Property="Height" Value="32"/>
+		<Setter Property="Height" Value="34"/>
 		<Setter Property="MinWidth" Value="2"/>
+		<Setter Property="Opacity" Value="0.7"/>
 		<Setter Property="HorizontalAlignment" Value="Center"/>
 	</Style>
 	

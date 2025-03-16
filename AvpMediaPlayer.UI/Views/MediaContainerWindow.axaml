@@ -35,7 +35,7 @@
 			<Setter Property="Padding" Value="0"/>
 			<Setter Property="Height" Value="32"/>
 		</Style>
-		<Style Selector="ListBox.items > ListBoxItem /template/ContentPresenter:focus">
+		<!--<Style Selector="ListBox.items > ListBoxItem /template/ContentPresenter:focus">
 			<Setter Property="Background" Value="Beige"/>
 			<Setter Property="CornerRadius" Value="6"/>
 			<Setter Property="Margin" Value="1"/>
@@ -49,10 +49,10 @@
 			<Setter Property="Background" Value="Beige"/>
 			<Setter Property="CornerRadius" Value="6"/>
 			<Setter Property="Margin" Value="1"/>
-		</Style>
+		</Style>-->
 		<Style Selector="ListBox.items > ListBoxItem:selected /template/ContentPresenter">
 			<Setter Property="Background" Value="Beige"/>
-			<Setter Property="CornerRadius" Value="6"/>
+			<!--<Setter Property="CornerRadius" Value="6"/>-->
 			<Setter Property="Margin" Value="1"/>
 		</Style>
 		<Style Selector="ListBox.items">
@@ -97,9 +97,9 @@
 						 CornerRadius="6">
 					<ListBox.ItemTemplate>
 						<DataTemplate x:DataType="model:ContentUIModel">
-							<Border CornerRadius="6"
+							<Border CornerRadius="0"
 									BorderBrush="Coral"
-									BorderThickness="1"
+									BorderThickness="0, 1, 0, 1"
 									Background="Transparent"
 									Height="30">
 								<Grid ColumnDefinitions="*, 40, 40, 120">
