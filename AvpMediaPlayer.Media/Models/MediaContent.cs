@@ -12,7 +12,7 @@ namespace AvpMediaPlayer.Media.Models
         }
         public Content? Content { get; }
         public abstract string? Description { get; }
-        public bool HasContent => Content?.IsRoot == false;
+        public bool HasContent => Content?.IsDirectory == false;
         public virtual IMediaTag? Tag { get; protected set; }
     }
 }

@@ -9,7 +9,7 @@
 
         public virtual string Name => Url;
         public virtual string RootPath => Url;
-        public virtual bool IsRoot => false;
+        public virtual bool IsDirectory => false;
         internal protected IList<Content> Contents { get; protected set; } = [];
         public string Url { get; }
         public IAsyncEnumerable<Content> GetValues() => GetContentsAsync();

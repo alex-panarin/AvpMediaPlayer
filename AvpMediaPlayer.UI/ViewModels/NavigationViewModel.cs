@@ -1,6 +1,10 @@
 ﻿using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Platform.Storage;
+using AvpMediaPlayer.Core.Helpers;
 using AvpMediaPlayer.Core.Models;
+using AvpMediaPlayer.Media.Models;
 using AvpMediaPlayer.UI.Models;
 using AvpMediaPlayer.UI.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -12,16 +16,18 @@ namespace AvpMediaPlayer.UI.ViewModels
     {
         private ContentUIModel? _SelectedItem;
         private MediaListWindow? _listWindow;
+        private readonly FilePickerFileType _filter;
 
-        public NavigationViewModel()
+        public NavigationViewModel(FilePickerFileType filter)
         {
-            Ribbon = new(OnButtonClick);
-            Container = new(OnSelectedChanged);
+            Ribbon = new(async (m) => await OnButtonClick(m));
+            Container = new(OnSelectedChanged, new MediaContentFactory());
             CloseApp = new(() => 
             {
                 if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
                     desktop.Shutdown();
             });
+            _filter = filter;
         }
 
         public RibbonViewModel Ribbon { get; }
@@ -36,12 +42,13 @@ namespace AvpMediaPlayer.UI.ViewModels
             } 
         }
         public RelayCommand CloseApp { get; }
-        private void OnButtonClick(RibbonModel? model)
+        private async Task OnButtonClick(RibbonModel? model)
         {
+            _listWindow ??= new MediaListWindow() { DataContext = Container };
+
             switch (model?.Action)
             {
                 case RibbonModel.List:
-                    _listWindow ??= new MediaListWindow() { DataContext = Container };
                     _listWindow.IsVisible = !_listWindow.IsVisible;
                     break;
                 case RibbonModel.Stop:
@@ -49,26 +56,57 @@ namespace AvpMediaPlayer.UI.ViewModels
                 case RibbonModel.Pause:
                 case RibbonModel.Next:
                 case RibbonModel.Prev:
-                    ProcessMediaCommand(model);
+                    await ProcessMediaCommand(model);
                     break;
                 case RibbonModel.Show:
                     break;
                 case RibbonModel.AddTrack:
                 case RibbonModel.AddList:
                 case RibbonModel.Open:
-                    ProcessMediaList(model);
+                    await ProcessMediaList(model);
                     break;
                 default:
                     break;
             }
         }
-        private void ProcessMediaList(RibbonModel model)
+        private async Task ProcessMediaList(RibbonModel model)
         {
+            var topLevel = TopLevel.GetTopLevel(_listWindow);
+            var provider = topLevel?.StorageProvider;
+
+            if (provider is null) return;
             
+            var startLocation = await provider.TryGetFolderFromPathAsync(@"E:\Music"); // TODO: from Settings
+            IReadOnlyList<IStorageItem>? items = null;
+            if (model.Action == RibbonModel.Open
+                || model.Action == RibbonModel.AddList)
+            {
+                items = await provider.OpenFolderPickerAsync(new FolderPickerOpenOptions
+                {
+                    Title = "Open Folders",
+                    AllowMultiple = model.Action == RibbonModel.AddList,
+                    SuggestedStartLocation = startLocation
+                });
+                
+            }
+            else if (model.Action == RibbonModel.AddTrack)
+            {
+                items = await provider.OpenFilePickerAsync(new FilePickerOpenOptions
+                {
+                    FileTypeFilter = [_filter],
+                    Title = "Add Files",
+                    AllowMultiple = true,
+                    SuggestedStartLocation = startLocation
+                });
+            }
+            
+            if (items?.IsEmpty() == true) return;
+
+            Container.AddMediaList(items!);
         }
-        private void ProcessMediaCommand(RibbonModel model)
+        private Task ProcessMediaCommand(RibbonModel model)
         {
-            
+            return Task.CompletedTask;
         }
         private void OnSelectedChanged(ContentUIModel? item)
             => SelectedItem = item;

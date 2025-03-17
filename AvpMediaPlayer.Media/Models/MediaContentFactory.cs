@@ -12,7 +12,7 @@ namespace AvpMediaPlayer.Media.Models
     {
         public IMediaContent Create(Content content)
         {
-            if (content.IsRoot)
+            if (content.IsDirectory)
                 return new ContainerMediaContent(content);
 
             var tag = MediaTag.Create(content.Url);

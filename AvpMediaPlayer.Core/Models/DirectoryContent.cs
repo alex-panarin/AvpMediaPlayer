@@ -8,7 +8,7 @@
             RootPath = Path.GetDirectoryName(Url)!;
             Name = Path.GetFileName(Url);
         }
-        public override bool IsRoot => true;
+        public override bool IsDirectory => true;
         public override string RootPath { get;  }
         public override string Name { get;  }
      
