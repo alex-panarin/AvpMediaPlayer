@@ -11,6 +11,7 @@ namespace AvpMediaPlayer.UI.ViewModels
         private readonly Action<ContentUIModel?> _onSelectedChanged;
         private ContentUIModel? _SelectedItem;
         private bool _IsPaneOpen;
+        private bool _IsWaitLoad = false;
 
         public MediaContainerViewModel(Action<ContentUIModel?> onSelectedChanged)
         {
@@ -25,7 +26,6 @@ namespace AvpMediaPlayer.UI.ViewModels
 
             PaneOpen = new(() => IsPaneOpen = !IsPaneOpen);
         }
-
         public ContentUIModel? SelectedItem
         { 
             get => _SelectedItem;
@@ -35,15 +35,17 @@ namespace AvpMediaPlayer.UI.ViewModels
                 _onSelectedChanged?.Invoke(value);
             }
         }
-
         public ObservableCollection<ContentUIModel> Items { get; }
-
         public RelayCommand PaneOpen { get; private set; }
-
-        private bool IsPaneOpen
+        public bool IsPaneOpen
         {
             get => _IsPaneOpen;
             set => SetProperty(ref _IsPaneOpen, value);
+        }
+        public bool IsWaitLoad
+        {
+            get => _IsWaitLoad;
+            set => SetProperty(ref _IsWaitLoad, value);
         }
     }
 }

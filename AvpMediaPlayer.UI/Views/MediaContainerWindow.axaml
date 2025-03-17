@@ -25,6 +25,7 @@
 		<Style Selector="TextBlock.list">
 			<Setter Property="Foreground" Value="Coral"/>
 			<Setter Property="HorizontalAlignment" Value="Center"/>
+			<Setter Property="VerticalAlignment" Value="Center"/>
 			<Setter Property="TextAlignment" Value="Center"/>
 		</Style>
 		<Style Selector="ListBox.items > ListBoxItem">
@@ -87,25 +88,34 @@
 			</Border.Background>
 		
 			<Grid RowDefinitions="28, *">
-				<Grid ColumnDefinitions="*, 40, 40, 120"
+				<Grid ColumnDefinitions="40, *, 40, 40, 120"
+					  RowDefinitions="26, 4"
 					  Grid.Row="0"
 					  Margin="4"
 					  VerticalAlignment="Center">
-					<TextBlock Grid.Column="0" 
+					<TextBlock Grid.Column="1" 
 							   Classes="list"
 							   Text="Наименование"/>
-					<PathIcon Grid.Column="1"
+					<PathIcon Grid.Column="2"
 							  Data="{StaticResource music_regular}"
 							  Foreground="Coral"
 							  Width="14"
 							  Height="14"/>
-					<TextBlock Grid.Column="2"
+					<TextBlock Grid.Column="3"
 							   Classes="list"
 							   Text="Тип"/>
-					<TextBlock Grid.Column="3" 
+					<TextBlock Grid.Column="4" 
 							   Classes="list"
 							   Text="Время"/>
+					<ProgressBar Grid.Row="1" 
+								 Grid.Column="1" 
+								 Grid.ColumnSpan="4" 
+								 Foreground="Coral"
+								 IsIndeterminate="True"
+								 VerticalAlignment="Center"
+								 IsVisible="{Binding IsWaitLoad}"/>
 				</Grid>
+				
 				<SplitView Grid.Row="1"
 						   Margin="2"
 						   IsPaneOpen="{Binding IsPaneOpen}"
@@ -150,22 +160,17 @@
 											   Foreground="Coral"
 											   HorizontalAlignment="Stretch"
 											   TextAlignment="DetectFromContent"/>
-									<!--<ProgressBar
-										Foreground="Coral"
-										IsIndeterminate="True"
-										IsVisible="{Binding IsWaitLoad}"/>-->
 								</Grid>
 							</Grid>
 					</SplitView.Pane>
 					<SplitView.Content>
-						<ListBox
-								Classes="items"
-								ItemsSource="{Binding Items}"
-								Margin="2"
-								Background="Transparent"
-								SelectedItem="{Binding SelectedItem}"
-								ScrollViewer.VerticalScrollBarVisibility="Auto"
-								CornerRadius="6">
+						<ListBox Classes="items"
+								 ItemsSource="{Binding Items}"
+								 Margin="2"
+								 Background="Transparent"
+								 SelectedItem="{Binding SelectedItem}"
+								 ScrollViewer.VerticalScrollBarVisibility="Auto"
+								 CornerRadius="6">
 							<ListBox.ItemTemplate>
 								<DataTemplate x:DataType="model:ContentUIModel">
 									<Border CornerRadius="0"
