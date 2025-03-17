@@ -11,7 +11,7 @@ namespace AvpMediaPlayer.UI.ViewModels
     public class NavigationViewModel : ObservableObject
     {
         private ContentUIModel? _SelectedItem;
-        private MediaContainerWindow? _listWindow;
+        private MediaListWindow? _listWindow;
 
         public NavigationViewModel()
         {
@@ -25,7 +25,7 @@ namespace AvpMediaPlayer.UI.ViewModels
         }
 
         public RibbonViewModel Ribbon { get; }
-        public MediaContainerViewModel Container { get; }
+        public MediaListViewModel Container { get; }
         public ContentUIModel? SelectedItem 
         { 
             get => _SelectedItem;
@@ -41,30 +41,34 @@ namespace AvpMediaPlayer.UI.ViewModels
             switch (model?.Action)
             {
                 case RibbonModel.List:
-                    _listWindow ??= new MediaContainerWindow() { DataContext = Container };
+                    _listWindow ??= new MediaListWindow() { DataContext = Container };
                     _listWindow.IsVisible = !_listWindow.IsVisible;
                     break;
                 case RibbonModel.Stop:
-                    break;
                 case RibbonModel.Play:
-                    break;
                 case RibbonModel.Pause:
+                case RibbonModel.Next:
+                case RibbonModel.Prev:
+                    ProcessMediaCommand(model);
                     break;
                 case RibbonModel.Show:
                     break;
-                case RibbonModel.AddFiles:
-                    break;
-                case RibbonModel.AddFolder:
-                    break;
+                case RibbonModel.AddTrack:
+                case RibbonModel.AddList:
                 case RibbonModel.Open:
-                    break;
-                case RibbonModel.Next:
-                    break;
-                case RibbonModel.Prev:
+                    ProcessMediaList(model);
                     break;
                 default:
                     break;
             }
+        }
+        private void ProcessMediaList(RibbonModel model)
+        {
+            
+        }
+        private void ProcessMediaCommand(RibbonModel model)
+        {
+            
         }
         private void OnSelectedChanged(ContentUIModel? item)
             => SelectedItem = item;

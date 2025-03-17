@@ -22,13 +22,6 @@ namespace AvpMediaPlayer.Core
                 Filter = filter ?? new(c => c != null);
             }
            
-            public async IAsyncEnumerable<ContentUIModel> Get()
-            {
-                await CheckLoadContent();
-
-                yield return new ContentUIModel(_contentFactory.Create(_contentRepository.Root), Load);
-            }
-
             public async IAsyncEnumerable<ContentUIModel> Get(Content content)
             {
                 await CheckLoadContent();

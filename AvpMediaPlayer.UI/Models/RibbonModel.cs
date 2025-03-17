@@ -15,8 +15,8 @@ namespace AvpMediaPlayer.UI.Models
         public const string List =  "back";
         public const string Show =  "show";
         public const string Open = "open";
-        public const string AddFolder = "addfolder";
-        public const string AddFiles = "addfiles";
+        public const string AddList = "addfolder";
+        public const string AddTrack = "addfiles";
         public const string Separator = "separator";
 
         public static (string, string, string)[] Buttons =
@@ -24,8 +24,8 @@ namespace AvpMediaPlayer.UI.Models
             (List, "chevron_down_regular", "Список"),
             (Separator, "", ""),
             (Open, "folder_open_regular", "Открыть"),
-            (AddFolder, "folder_add_regular", "Папку"),
-            (AddFiles, "collections_add_regular", "Файлы"),
+            (AddList, "folder_add_regular", "Папку"),
+            (AddTrack, "collections_add_regular", "Файлы"),
             (Separator, "", ""),
             (Stop, "stop_regular", "Стоп"),
             (Play, "play_regular", "Играть"),

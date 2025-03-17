@@ -19,8 +19,8 @@ namespace AvpMediaPlayer.UI.ViewModels
         private readonly string[] _allwaysVisible =
         {
             RibbonModel.List,
-            RibbonModel.AddFiles,
-            RibbonModel.AddFolder,
+            RibbonModel.AddTrack,
+            RibbonModel.AddList,
             RibbonModel.Open
         };
         private readonly IEnumerable<RibbonModel> _changableButtons;

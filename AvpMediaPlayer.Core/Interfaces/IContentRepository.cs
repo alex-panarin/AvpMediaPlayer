@@ -6,6 +6,5 @@ namespace AvpMediaPlayer.Core.Interfaces
     {
         IEnumerable<Content> Get(Content parent);
         Task LoadContents();
-        Content Root { get; }
     }
 }

@@ -7,26 +7,29 @@ namespace AvpMediaPlayer.Core
         : IContentRepository
     {
         private readonly IContentProvider provider;
+        private readonly DirectoryContent _rootDirectory;
+
         public LocalContentRepository(IContentProvider provider, string rootPath)
         {
             this.provider = provider ?? throw new ArgumentNullException(nameof(provider));
-            Root = new DirectoryContent(rootPath);
+            _rootDirectory = new DirectoryContent(rootPath);
         }
-        private DirectoryContent Root { get; }
-        Content IContentRepository.Root => Root;
-        public async Task LoadContents()
-        {
-            await LoadContents(Root);
-        }
+
         public IEnumerable<Content> Get(Content parent)
         {
             return parent.Contents;
         }
-        private async Task LoadContents(Content root)
+
+        public async Task LoadContents()
         {
-            await foreach (Content content in provider.GetContents(root))
+            await LoadContents(_rootDirectory);
+        }
+        
+        private async Task LoadContents(Content parent)
+        {
+            await foreach (Content content in provider.GetContents(parent))
             {
-                root.Contents.Add(content);
+                parent.Contents.Add(content);
 
                 await LoadContents(content);
             }

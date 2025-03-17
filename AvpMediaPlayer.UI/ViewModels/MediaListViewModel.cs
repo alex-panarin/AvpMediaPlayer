@@ -6,14 +6,14 @@ using System.Collections.ObjectModel;
 
 namespace AvpMediaPlayer.UI.ViewModels
 {
-    public class MediaContainerViewModel : ObservableObject
+    public class MediaListViewModel : ObservableObject
     {
         private readonly Action<ContentUIModel?> _onSelectedChanged;
         private ContentUIModel? _SelectedItem;
         private bool _IsPaneOpen;
         private bool _IsWaitLoad = false;
 
-        public MediaContainerViewModel(Action<ContentUIModel?> onSelectedChanged)
+        public MediaListViewModel(Action<ContentUIModel?> onSelectedChanged)
         {
             Items =
             [
@@ -47,5 +47,6 @@ namespace AvpMediaPlayer.UI.ViewModels
             get => _IsWaitLoad;
             set => SetProperty(ref _IsWaitLoad, value);
         }
+       
     }
 }

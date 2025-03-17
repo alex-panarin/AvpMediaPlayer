@@ -4,11 +4,11 @@ using Avalonia.Controls.ApplicationLifetimes;
 
 namespace AvpMediaPlayer.UI.Views;
 
-public partial class MediaContainerWindow : Window
+public partial class MediaListWindow : Window
 {
     private static Window? _mainWindow;
 
-    public MediaContainerWindow()
+    public MediaListWindow()
     {
         InitializeComponent();
 
