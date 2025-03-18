@@ -88,9 +88,9 @@
 				</LinearGradientBrush>
 			</Border.Background>
 		
-			<Grid RowDefinitions="28, *">
-				<Grid ColumnDefinitions="40, *, 40, 40, 120"
-					  RowDefinitions="26, 4"
+			<Grid RowDefinitions="40, *">
+				<Grid ColumnDefinitions="40, *, 40, 40, 100"
+					  RowDefinitions="28, 4"
 					  Grid.Row="0"
 					  Margin="4"
 					  VerticalAlignment="Center">
@@ -118,11 +118,12 @@
 				</Grid>
 				
 				<SplitView Grid.Row="1"
-						   Margin="2"
 						   IsPaneOpen="{Binding IsPaneOpen}"
 						   DisplayMode="CompactInline"
 						   OpenPaneLength="220"
-						   CompactPaneLength="40">
+						   CompactPaneLength="40"
+						   Margin="2,2,2,6"
+						   Background="Transparent">
 					<SplitView.Pane>
 							<Grid ColumnDefinitions="40, *">
 								<StackPanel Grid.Column="0"
@@ -162,11 +163,20 @@
 											   HorizontalAlignment="Stretch"
 											   TextAlignment="DetectFromContent"/>
 									<ListBox Grid.Row="1"
+											 Classes="items"
+											 CornerRadius="4"
 											 ItemsSource="{Binding Lists}"
 											 SelectedItem="{Binding SelectedList}">
+										<ListBox.ItemsPanel>
+											<ItemsPanelTemplate>
+												<VirtualizingStackPanel/>
+											</ItemsPanelTemplate>
+										</ListBox.ItemsPanel>
 										<ListBox.ItemTemplate>
 											<DataTemplate>
-												<TextBox Text="{Binding Title}"/>
+												<TextBlock Text="{Binding Title}"
+														   Margin="5"
+														   ScrollViewer.VerticalScrollBarVisibility="Auto"/>
 											</DataTemplate>
 										</ListBox.ItemTemplate>
 									</ListBox>
@@ -176,11 +186,14 @@
 					<SplitView.Content>
 						<ListBox Classes="items"
 								 ItemsSource="{Binding Items}"
-								 Margin="2"
-								 Background="Transparent"
 								 SelectedItem="{Binding SelectedItem}"
-								 ScrollViewer.VerticalScrollBarVisibility="Auto"
-								 CornerRadius="6">
+								 Background="Transparent"
+								 ScrollViewer.VerticalScrollBarVisibility="Auto">
+							<ListBox.ItemsPanel>
+								<ItemsPanelTemplate>
+									<VirtualizingStackPanel/>
+								</ItemsPanelTemplate>
+							</ListBox.ItemsPanel>
 							<ListBox.ItemTemplate>
 								<DataTemplate x:DataType="model:ContentUIModel">
 									<Border CornerRadius="0"
@@ -188,7 +201,7 @@
 											BorderThickness="0, 1, 0, 1"
 											Background="Transparent"
 											Height="30">
-										<Grid ColumnDefinitions="*, 40, 40, 120">
+										<Grid ColumnDefinitions="*, 40, 40, 100">
 											<TextBlock Grid.Column="0"
 														Classes="list"
 														Text="{Binding Title}"/>

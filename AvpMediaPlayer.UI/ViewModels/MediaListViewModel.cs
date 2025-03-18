@@ -5,7 +5,6 @@ using AvpMediaPlayer.Core.Models;
 using AvpMediaPlayer.UI.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using TagLib.Ape;
 
 namespace AvpMediaPlayer.UI.ViewModels
 {
@@ -79,7 +78,7 @@ namespace AvpMediaPlayer.UI.ViewModels
                         }
                         else
                         {
-                            list.Title ??= "Новый список";
+                            list.Title ??= content.Model?.ParentName;
                             list.Contents.Add(content);
                         }
                     }
@@ -88,8 +87,11 @@ namespace AvpMediaPlayer.UI.ViewModels
                 {
                     Dispatcher.UIThread.Invoke(() =>
                     {
-                        Lists.Add(list);
-                        SelectedList = list;
+                        if (list.Contents.Any())
+                        {
+                            Lists.Add(list);
+                            SelectedList = list;
+                        }
                         IsWaitLoad = false;
                     });
                 }
