@@ -42,7 +42,7 @@ namespace AvpMediaPlayer.UI.ViewModels
                 SetProperty(ref _SelectedList, value);
                 using var locker = Items!.LockChangedEvent();
                 Items.Clear();
-                Items.AddRange(value is not null ? value.Contents : []);
+                Items.AddRange(value is null ? [] : value.Contents);
             }
         }
         public LockedObservableCollection<ContentUIModel>? Items { get; } = [];
@@ -89,6 +89,7 @@ namespace AvpMediaPlayer.UI.ViewModels
                     {
                         if (list.Contents.Any())
                         {
+                            IsPaneOpen = true;
                             Lists.Add(list);
                             SelectedList = list;
                         }

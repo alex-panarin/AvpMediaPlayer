@@ -1,4 +1,6 @@
-﻿using Avalonia.Platform.Storage;
+﻿using Avalonia;
+using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Platform.Storage;
 using AvpMediaPlayer.UI.ViewModels;
 
 namespace AvpMediaPlayer.App.ViewModels
@@ -12,7 +14,14 @@ namespace AvpMediaPlayer.App.ViewModels
         };
         public MainWindowViewModel()
         {
-            Navigation = new(_filter);
+            Navigation = new(_filter)
+            {
+                CloseApp = new(() =>
+                {
+                    if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+                        desktop.Shutdown();
+                })
+            };
         }
 
         public NavigationViewModel Navigation { get; }

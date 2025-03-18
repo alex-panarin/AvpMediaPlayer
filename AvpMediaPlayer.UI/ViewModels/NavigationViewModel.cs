@@ -1,6 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Controls.Selection;
 using Avalonia.Platform.Storage;
 using AvpMediaPlayer.Core;
 using AvpMediaPlayer.Core.Helpers;
@@ -17,6 +18,7 @@ namespace AvpMediaPlayer.UI.ViewModels
     {
         private ContentUIModel? _SelectedItem;
         private MediaListWindow? _listWindow;
+        private string? _SelectedText;
         private readonly FilePickerFileType _filter;
 
         public NavigationViewModel(FilePickerFileType filter)
@@ -27,14 +29,14 @@ namespace AvpMediaPlayer.UI.ViewModels
                 , new ContentUIFactory(new LocalContentRepository(new LocalContentProvider())
                 , new MediaContentFactory()
                 , (c) => patterns?.Any(f => c.Url.Contains(f)) == true));
-            CloseApp = new(() => 
-            {
-                if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-                    desktop.Shutdown();
-            });
+          
             _filter = filter;
         }
-
+        public string? SelectedText 
+        { 
+            get => _SelectedText; 
+            set => SetProperty(ref _SelectedText, value); 
+        }
         public RibbonViewModel Ribbon { get; }
         public MediaListViewModel Container { get; }
         public ContentUIModel? SelectedItem 
@@ -44,9 +46,10 @@ namespace AvpMediaPlayer.UI.ViewModels
             {
                 SetProperty(ref _SelectedItem, value);
                 Ribbon.SelectedItem = _SelectedItem;
+                SelectedText = _SelectedItem?.Title;
             } 
         }
-        public RelayCommand CloseApp { get; }
+        public RelayCommand? CloseApp { get; set; }
         private async Task OnButtonClick(RibbonModel? model)
         {
             _listWindow ??= new MediaListWindow() { DataContext = Container };
@@ -59,9 +62,11 @@ namespace AvpMediaPlayer.UI.ViewModels
                 case RibbonModel.Stop:
                 case RibbonModel.Play:
                 case RibbonModel.Pause:
+                    await ProcessMediaCommand(model);
+                    break;
                 case RibbonModel.Next:
                 case RibbonModel.Prev:
-                    await ProcessMediaCommand(model);
+                    ProcessNavigationCommand(model);
                     break;
                 case RibbonModel.Show:
                     break;
@@ -73,6 +78,17 @@ namespace AvpMediaPlayer.UI.ViewModels
                 default:
                     break;
             }
+        }
+        private void ProcessNavigationCommand(RibbonModel model)
+        {
+            if (SelectedItem is null || Container.Items is null) return;
+
+            int index = Container.Items.IndexOf(SelectedItem);
+            var ni = model.Action == RibbonModel.Next ? index + 1 : index - 1;
+            if (ni < 0) ni = Container.Items.Count - 1;
+            if (ni >= Container.Items.Count) ni = 0;
+
+            Container.SelectedItem = Container.Items[ni];
         }
         private async Task ProcessMediaList(RibbonModel model)
         {

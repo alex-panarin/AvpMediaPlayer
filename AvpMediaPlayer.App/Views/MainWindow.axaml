@@ -43,7 +43,7 @@
 							<PathIcon Data="{StaticResource music_regular}"
 									  HorizontalAlignment="Left"
 									  Foreground="Coral"/>
-							<Label Content="lABEEL cONTENT">
+							<Label Content="{Binding Navigation.SelectedText}">
 						</Label>
 					</TextBlock>
 					<Button Grid.Column="1"
