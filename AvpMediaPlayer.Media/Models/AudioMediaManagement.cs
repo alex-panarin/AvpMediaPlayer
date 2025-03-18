@@ -50,18 +50,18 @@ namespace AvpMediaPlayer.Media.Models
             get => _LoopCatalog;
             set => _LoopCatalog = value;
         }
-        public TimeSpan Duration
+        public double Duration
         {
             get => !IsInitialize
-                ? TimeSpan.Zero
-                : TimeSpan.FromSeconds(Bass.ChannelBytes2Seconds(Stream, Bass.ChannelGetLength(Stream)));
+                ? 0d
+                : Bass.ChannelBytes2Seconds(Stream, Bass.ChannelGetLength(Stream));
         }
-        public TimeSpan Position 
+        public double Position 
         {
             get => !IsInitialize 
-                ? TimeSpan.Zero
-                : TimeSpan.FromSeconds(Bass.ChannelBytes2Seconds(Stream, Bass.ChannelGetPosition(Stream)));
-            set => Bass.ChannelSetPosition(Stream, Bass.ChannelSeconds2Bytes(Stream, value.TotalSeconds));
+                ? 0d
+                : Bass.ChannelBytes2Seconds(Stream, Bass.ChannelGetPosition(Stream));
+            set => Bass.ChannelSetPosition(Stream, Bass.ChannelSeconds2Bytes(Stream, value));
         }
         private int Stream => _getStream();
         private bool IsInitialize  => _isMediaInit();

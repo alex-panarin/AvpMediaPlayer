@@ -6,17 +6,34 @@ namespace AvpMediaPlayer.Core
     public class LocalContentProvider
         : IContentProvider
     {
-        public async IAsyncEnumerable<Content> GetContents(Content content)
+        public Content GetContent(string url)
         {
-            await foreach(var item in content.GetValues())
-            {
-                yield return item;
-            }
+            return Directory.Exists(url)
+                ? new DirectoryContent(url)
+                : new FileContent(url);
         }
-
-        public IAsyncEnumerable<Content> GetContents(string root)
+        public IEnumerable<Content> GetContents(string url)
         {
-            return GetContents(new DirectoryContent(root));
+            var flags = new[]
+            {
+                FileAttributes.Hidden,
+                FileAttributes.System,
+                FileAttributes.ReparsePoint
+            };
+           
+            foreach (var path in (Directory.Exists(url)
+                ? Directory.EnumerateFileSystemEntries(url, "*.*", SearchOption.TopDirectoryOnly)
+                : [])
+                .Where(p =>
+                {
+                    var attr = File.GetAttributes(p);
+                    return flags.All(f => attr.HasFlag(f) == false);
+                }))
+            {
+                yield return File.GetAttributes(path).HasFlag(FileAttributes.Directory)
+                     ? new DirectoryContent(path)
+                     : new FileContent(path);
+            }
         }
     }
 }

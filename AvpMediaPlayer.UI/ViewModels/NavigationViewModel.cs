@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
+using AvpMediaPlayer.Core;
 using AvpMediaPlayer.Core.Helpers;
 using AvpMediaPlayer.Core.Models;
 using AvpMediaPlayer.Media.Models;
@@ -20,8 +21,12 @@ namespace AvpMediaPlayer.UI.ViewModels
 
         public NavigationViewModel(FilePickerFileType filter)
         {
+            var patterns = filter.Patterns?.Select(p => p.Replace("*",""));
             Ribbon = new(async (m) => await OnButtonClick(m));
-            Container = new(OnSelectedChanged, new MediaContentFactory());
+            Container = new(OnSelectedChanged
+                , new ContentUIFactory(new LocalContentRepository(new LocalContentProvider())
+                , new MediaContentFactory()
+                , (c) => patterns?.Any(f => c.Url.Contains(f)) == true));
             CloseApp = new(() => 
             {
                 if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
@@ -104,9 +109,9 @@ namespace AvpMediaPlayer.UI.ViewModels
 
             Container.AddMediaList(items!);
         }
-        private Task ProcessMediaCommand(RibbonModel model)
+        private async Task ProcessMediaCommand(RibbonModel model)
         {
-            return Task.CompletedTask;
+            await Task.CompletedTask;
         }
         private void OnSelectedChanged(ContentUIModel? item)
             => SelectedItem = item;

@@ -1,6 +1,5 @@
 ﻿using Avalonia.Platform.Storage;
 using AvpMediaPlayer.UI.ViewModels;
-using System.Linq;
 
 namespace AvpMediaPlayer.App.ViewModels
 {
@@ -8,7 +7,8 @@ namespace AvpMediaPlayer.App.ViewModels
     {
         static FilePickerFileType _filter = new("Audio")
         { 
-            Patterns = ["*.mp3", "*.ogg", "*.flac", "*.wav", "*.jpg", "*.jpeg", "*.bmp", "*.tiff", "*.png"] 
+            Patterns = //["*.mp3", "*.ogg", "*.flac", "*.wav", "*.jpg", "*.jpeg", "*.bmp", "*.tiff", "*.png"] 
+                ["*.mp3", "*.ogg", "*.flac", "*.wav", "*.wma"]
         };
         public MainWindowViewModel()
         {

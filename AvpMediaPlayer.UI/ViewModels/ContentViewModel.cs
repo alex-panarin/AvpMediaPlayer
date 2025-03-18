@@ -12,7 +12,7 @@ namespace AvpMediaPlayer.UI.ViewModels
 {
     public class ContentViewModel : ObservableObject
     {
-        private readonly IContentLoadFactory? _contentFactory;
+        private readonly IContentUIFactory? _contentFactory;
         public bool _IsPaneOpen = true;
         private ContentUIModel? _SelectedItem;
         private ObservableCollection<ContentUIModel> _Lists;
@@ -23,7 +23,7 @@ namespace AvpMediaPlayer.UI.ViewModels
         {
             _Lists = [];
         }
-        public ContentViewModel(IContentLoadFactory contentFactory)
+        public ContentViewModel(IContentUIFactory contentFactory)
             : this()
         {
             _contentFactory = contentFactory ?? throw new ArgumentNullException(nameof(contentFactory));
@@ -37,12 +37,12 @@ namespace AvpMediaPlayer.UI.ViewModels
 
                 IsWaitLoad = true;
 
-                Task.Run(async () =>
+                Task.Run(() =>
                 {
                     
                     try
                     {
-                        await foreach (var content in _contentFactory!.Get(null)) // TODO:
+                        foreach (var content in _contentFactory!.Get((Content)default)) // TODO:
                         {
                             _Lists.Add(content);
                         }

@@ -1,37 +1,40 @@
 ﻿using AvpMediaPlayer.Core.Interfaces;
 using AvpMediaPlayer.Core.Models;
+using System.Collections.Concurrent;
 
 namespace AvpMediaPlayer.Core
 {
     public class LocalContentRepository 
         : IContentRepository
     {
-        private readonly IContentProvider provider;
-        private readonly DirectoryContent _rootDirectory;
-
-        public LocalContentRepository(IContentProvider provider, string rootPath)
+        private readonly IContentProvider _provider;
+        private readonly ConcurrentDictionary<string, Content> _storage = [];
+        public LocalContentRepository(IContentProvider provider)
         {
-            this.provider = provider ?? throw new ArgumentNullException(nameof(provider));
-            _rootDirectory = new DirectoryContent(rootPath);
+            this._provider = provider ?? throw new ArgumentNullException(nameof(provider));
         }
-
         public IEnumerable<Content> Get(Content parent)
         {
+            LoadContents(parent);
             return parent.Contents;
         }
-
-        public async Task LoadContents()
+        public Content Get(string path)
         {
-            await LoadContents(_rootDirectory);
+            var content = _storage.GetOrAdd(path, _provider.GetContent(path));
+            LoadContents(content);
+
+            return content;
         }
-        
-        private async Task LoadContents(Content parent)
+        private void LoadContents(Content parent)
         {
-            await foreach (Content content in provider.GetContents(parent))
+            foreach (var content in _provider.GetContents(parent.Url))
             {
-                parent.Contents.Add(content);
-
-                await LoadContents(content);
+                if (_storage.TryGetValue(content.Url, out var temp))
+                    break;
+                
+                temp = _storage.GetOrAdd(content.Url, content);
+                parent.Contents.Add(temp);
+                LoadContents(temp);
             }
         }
     }

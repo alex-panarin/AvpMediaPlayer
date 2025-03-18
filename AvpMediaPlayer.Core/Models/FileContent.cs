@@ -10,15 +10,8 @@
             Ext = Path.GetExtension(Url);
         }
         public override string Name { get; }
-        public override string RootPath { get; } 
+        public override string RootPath { get; }
+        public override bool IsDirectory => false;
         public string Ext { get; }
-     
-        protected override async IAsyncEnumerable<Content> GetContentsAsync()
-        {
-            await Task.Yield();
-
-            yield break;
-        }
-        
     }
 }

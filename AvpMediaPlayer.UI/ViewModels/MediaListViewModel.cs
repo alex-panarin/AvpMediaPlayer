@@ -1,31 +1,29 @@
-﻿using Avalonia.Platform.Storage;
+﻿using Avalonia.Controls;
+using Avalonia.Platform.Storage;
+using Avalonia.Threading;
+using AvpMediaPlayer.Core.Interfaces;
 using AvpMediaPlayer.Core.Models;
 using AvpMediaPlayer.Media.Models;
+using AvpMediaPlayer.UI.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
+using System.Net.WebSockets;
 
 namespace AvpMediaPlayer.UI.ViewModels
 {
     public class MediaListViewModel : ObservableObject
     {
         private readonly Action<ContentUIModel?> _onSelectedChanged;
-        private readonly IMediaContentFactory _contentFactory;
+        private readonly IContentUIFactory _contentFactory;
         private ContentUIModel? _SelectedItem;
+        private MediaListModel? _SelectedList;
         private bool _IsPaneOpen;
         private bool _IsWaitLoad = false;
-        private ObservableCollection<ContentUIModel>? _Items;
 
         public MediaListViewModel(Action<ContentUIModel?> onSelectedChanged,
-            IMediaContentFactory contentFactory)
+            IContentUIFactory contentFactory)
         {
-            Items =
-            [
-                new ContentUIModel(new AudioMediaContent(new FileContent(@"E:\MUSIC\Astrix\Astrix - Astrix The Best of - Artcore.flac"))),
-                new ContentUIModel(new AudioMediaContent(new FileContent(@"E:\MUSIC\Astrix\Astrix - Astrix The Best of - Beyond the Senses.flac"))),
-                new ContentUIModel(new AudioMediaContent(new FileContent(@"E:\MUSIC\Astrix\Astrix - Astrix The Best of - Monster(remix).flac"))),
-            ];
-            
             _onSelectedChanged = onSelectedChanged;
             _contentFactory = contentFactory;
 
@@ -40,11 +38,13 @@ namespace AvpMediaPlayer.UI.ViewModels
                 _onSelectedChanged?.Invoke(value);
             }
         }
-        public ObservableCollection<ContentUIModel>? Items 
-        { 
-            get => _Items;
-            private set => SetProperty(ref _Items, value);
+        public MediaListModel? SelectedList
+        {
+            get => _SelectedList;
+            set => SetProperty(ref _SelectedList, value);
         }
+        public LockedObservableCollection<ContentUIModel>? Items { get; } = [];
+        public LockedObservableCollection<MediaListModel>? Lists { get; } = [];
         public RelayCommand PaneOpen { get; private set; }
         public bool IsPaneOpen
         {
@@ -56,16 +56,39 @@ namespace AvpMediaPlayer.UI.ViewModels
             get => _IsWaitLoad;
             set => SetProperty(ref _IsWaitLoad, value);
         }
-
         internal void AddMediaList(IReadOnlyList<IStorageItem> items)
         {
-            var contents = items.Select(i =>
+            IsWaitLoad = true;
+            
+            Task.Run(() =>
             {
-                return new ContentUIModel(_contentFactory.Create(i is IStorageFolder folder
-                    ? new DirectoryContent(i.TryGetLocalPath()!)
-                    : new FileContent(i.TryGetLocalPath()!)));
+                try
+                {
+                    if (Items is not null)
+                    {
+                        using (var locker = Items.LockChangedEvent())
+                        {
+                            Items.Clear();
+
+                            var contentpaths = items.Select(i => i.TryGetLocalPath());
+                            foreach (var content in _contentFactory.Get(contentpaths!))
+                            {
+                                if (content.IsDirectory)
+                                    Items.AddRange(_contentFactory.Get(content.Model!));
+                                else
+                                    Items.Add(content);
+                            }
+                        }
+                    }
+                }
+                finally
+                {
+                    Dispatcher.UIThread.Invoke(() =>
+                    {
+                        IsWaitLoad = false;
+                    });
+                }
             });
-            Items = [.. contents];
         }
     }
 }

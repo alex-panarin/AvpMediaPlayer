@@ -4,9 +4,7 @@ namespace AvpMediaPlayer.Core.Interfaces
 {
     public interface IContentProvider
     {
-        IAsyncEnumerable<Content> GetContents(Content content);
-        IAsyncEnumerable<Content> GetContents(string root);
+        Content GetContent(string url);
+        IEnumerable<Content> GetContents(string parent);
     }
-
-    
 }

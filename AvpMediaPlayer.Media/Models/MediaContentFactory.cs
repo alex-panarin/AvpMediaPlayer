@@ -3,11 +3,6 @@ using AvpMediaPlayer.Core.Models;
 
 namespace AvpMediaPlayer.Media.Models
 {
-    public interface IMediaContentFactory
-    {
-        IMediaContent Create(Content content);
-    }
-
     public class MediaContentFactory : IMediaContentFactory
     {
         public IMediaContent Create(Content content)
@@ -16,6 +11,7 @@ namespace AvpMediaPlayer.Media.Models
                 return new ContainerMediaContent(content);
 
             var tag = MediaTag.Create(content.Url);
+
             return tag?.MediaType switch
             {
                 MediaTypes.Video => new VideoMediaContent(content, tag),
@@ -23,7 +19,6 @@ namespace AvpMediaPlayer.Media.Models
                 MediaTypes.Photo => new PhotoMediaContent(content, tag),
                 _ => throw new ArgumentOutOfRangeException("MediaType")
             };
-            
         }
     }
 }
