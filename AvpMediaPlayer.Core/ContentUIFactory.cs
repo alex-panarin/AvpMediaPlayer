@@ -19,7 +19,7 @@ namespace AvpMediaPlayer.Core
         public IEnumerable<ContentUIModel> Get(IEnumerable<string> paths)
         {
             var contents = paths.Select(path => _contentRepository.Get(path))
-                .SelectMany(c => Load(c));
+                .SelectMany(c => Get(c));
             return contents;
         }
         public IEnumerable<ContentUIModel> Get(Content content)
@@ -29,9 +29,13 @@ namespace AvpMediaPlayer.Core
         }
         private IEnumerable<ContentUIModel> Load(Content content)
         {
-            return _contentRepository.Get(content)
-                .Where(Filter)
-                .Select(c => new ContentUIModel(_contentFactory.Create(c), Load)); // Deffered loading
+            if (content.IsDirectory)
+            {
+                return _contentRepository.Get(content)
+                    .Where(Filter)
+                    .Select(c => new ContentUIModel(_contentFactory.Create(c), Load)); // Deffered loading
+            }
+            return [new ContentUIModel(_contentFactory.Create(content), Load)];
         }
     }
 }

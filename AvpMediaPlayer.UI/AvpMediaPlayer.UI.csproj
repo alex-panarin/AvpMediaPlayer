@@ -5,6 +5,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="ViewModels\ContentViewModel.cs" />
+  </ItemGroup>
   <ItemGroup>
 	<PackageReference Include="Avalonia" Version="11.2.4" />
 	<PackageReference Include="Avalonia.Desktop" Version="11.2.4" />

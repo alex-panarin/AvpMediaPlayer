@@ -1,14 +1,10 @@
-﻿using Avalonia.Controls;
-using Avalonia.Platform.Storage;
+﻿using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using AvpMediaPlayer.Core.Interfaces;
 using AvpMediaPlayer.Core.Models;
-using AvpMediaPlayer.Media.Models;
 using AvpMediaPlayer.UI.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System.Collections.ObjectModel;
-using System.Net.WebSockets;
 
 namespace AvpMediaPlayer.UI.ViewModels
 {
@@ -41,7 +37,12 @@ namespace AvpMediaPlayer.UI.ViewModels
         public MediaListModel? SelectedList
         {
             get => _SelectedList;
-            set => SetProperty(ref _SelectedList, value);
+            set
+            {
+                SetProperty(ref _SelectedList, value);
+                using var locker = Items!.LockChangedEvent();
+                Items.AddRange(value is not null ? value.Contents : []);
+            }
         }
         public LockedObservableCollection<ContentUIModel>? Items { get; } = [];
         public LockedObservableCollection<MediaListModel>? Lists { get; } = [];
@@ -62,22 +63,22 @@ namespace AvpMediaPlayer.UI.ViewModels
             
             Task.Run(() =>
             {
+                using var locker = Lists!.LockChangedEvent();
+                var list = new MediaListModel();
                 try
                 {
-                    if (Items is not null)
+                    var contentpaths = items.Select(i => i.TryGetLocalPath());
+                    foreach (var content in _contentFactory.Get(contentpaths!))
                     {
-                        using (var locker = Items.LockChangedEvent())
+                        if (content.IsDirectory)
                         {
-                            Items.Clear();
-
-                            var contentpaths = items.Select(i => i.TryGetLocalPath());
-                            foreach (var content in _contentFactory.Get(contentpaths!))
-                            {
-                                if (content.IsDirectory)
-                                    Items.AddRange(_contentFactory.Get(content.Model!));
-                                else
-                                    Items.Add(content);
-                            }
+                            list.Title ??= content.Title;
+                            list.Contents.AddRange(_contentFactory.Get(content.Model!));
+                        }
+                        else
+                        {
+                            list.Title ??= "Новый список";
+                            list.Contents.Add(content);
                         }
                     }
                 }
@@ -85,6 +86,8 @@ namespace AvpMediaPlayer.UI.ViewModels
                 {
                     Dispatcher.UIThread.Invoke(() =>
                     {
+                        Lists.Add(list);
+                        SelectedList = list;
                         IsWaitLoad = false;
                     });
                 }

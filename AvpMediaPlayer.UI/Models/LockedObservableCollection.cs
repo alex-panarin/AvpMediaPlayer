@@ -8,7 +8,7 @@ namespace AvpMediaPlayer.UI.Models
     {
         class Locker : IDisposable
         {
-            private readonly LockedObservableCollection<TEntity> _collection;
+            private LockedObservableCollection<TEntity>? _collection;
             public Locker(LockedObservableCollection<TEntity> collection)
             {
                 _collection = collection;
@@ -16,8 +16,12 @@ namespace AvpMediaPlayer.UI.Models
             }
             public void Dispose()
             {
-                _collection.LockRaiseEvent = false;
-                _collection.RaiseCollectionChanged();
+                if (_collection is not null)
+                {
+                    _collection.LockRaiseEvent = false;
+                    _collection.RaiseCollectionChanged();
+                }
+                _collection = null;
             }
         }
 
@@ -26,7 +30,6 @@ namespace AvpMediaPlayer.UI.Models
         {
             this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
-
         public void AddRange(IEnumerable<TEntity> collection)
         {
             if (collection == null) return;

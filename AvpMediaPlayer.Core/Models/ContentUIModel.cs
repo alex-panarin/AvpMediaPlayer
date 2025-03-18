@@ -26,7 +26,7 @@ namespace AvpMediaPlayer.Core.Models
                     && _contentFactory is not null
                     && Model is not null)
                 {
-                    SetProperty(ref _Contents, [.. _contentFactory(Model)]);
+                    SetProperty(ref _Contents, Model.IsDirectory ? [.. _contentFactory(Model)] : []);
                 }
 
                 return _Contents;
