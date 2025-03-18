@@ -4,6 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:vm="using:AvpMediaPlayer.UI.ViewModels"
 		xmlns:model="using:AvpMediaPlayer.Core.Models"
+		xmlns:uimodel="using:AvpMediaPlayer.UI.Models"
         mc:Ignorable="d" d:DesignWidth="640" d:DesignHeight="480"
         x:Class="AvpMediaPlayer.UI.Views.MediaListWindow"
 		x:DataType="vm:MediaListViewModel"
@@ -160,6 +161,15 @@
 											   Foreground="Coral"
 											   HorizontalAlignment="Stretch"
 											   TextAlignment="DetectFromContent"/>
+									<ListBox Grid.Row="1"
+											 ItemsSource="{Binding Lists}"
+											 SelectedItem="{Binding SelectedList}">
+										<ListBox.ItemTemplate>
+											<DataTemplate>
+												<TextBox Text="{Binding Title}"/>
+											</DataTemplate>
+										</ListBox.ItemTemplate>
+									</ListBox>
 								</Grid>
 							</Grid>
 					</SplitView.Pane>

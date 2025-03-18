@@ -5,6 +5,7 @@ using AvpMediaPlayer.Core.Models;
 using AvpMediaPlayer.UI.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using TagLib.Ape;
 
 namespace AvpMediaPlayer.UI.ViewModels
 {
@@ -41,6 +42,7 @@ namespace AvpMediaPlayer.UI.ViewModels
             {
                 SetProperty(ref _SelectedList, value);
                 using var locker = Items!.LockChangedEvent();
+                Items.Clear();
                 Items.AddRange(value is not null ? value.Contents : []);
             }
         }
