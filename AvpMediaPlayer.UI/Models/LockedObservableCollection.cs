@@ -24,7 +24,14 @@ namespace AvpMediaPlayer.UI.Models
                 _collection = null;
             }
         }
-
+        public LockedObservableCollection()
+        {
+            
+        }
+        public LockedObservableCollection(IEnumerable<TEntity> entities)
+        {
+            AddRange(entities);
+        }
         private bool LockRaiseEvent { get; set; } = false;
         private void RaiseCollectionChanged()
         {

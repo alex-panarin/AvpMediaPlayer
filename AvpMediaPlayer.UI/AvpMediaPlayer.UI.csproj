@@ -16,6 +16,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AvpMediaPlayer.Core\AvpMediaPlayer.Core.csproj" />
+    <ProjectReference Include="..\AvpMediaPlayer.Data\AvpMediaPlayer.Data.csproj" />
     <ProjectReference Include="..\AvpMediaPlayer.Media\AvpMediaPlayer.Media.csproj" />
   </ItemGroup>
   <ItemGroup>

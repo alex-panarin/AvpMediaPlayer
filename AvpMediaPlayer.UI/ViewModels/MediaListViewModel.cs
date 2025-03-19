@@ -3,6 +3,7 @@ using Avalonia.Threading;
 using AvpMediaPlayer.Core.Interfaces;
 using AvpMediaPlayer.Core.Models;
 using AvpMediaPlayer.UI.Models;
+using AvpMediaPlayer.UI.Repositories;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -11,17 +12,17 @@ namespace AvpMediaPlayer.UI.ViewModels
     public class MediaListViewModel : ObservableObject
     {
         private readonly Action<ContentUIModel?> _onSelectedChanged;
-        private readonly IContentUIFactory _contentFactory;
+        private readonly IMediaListRepository _mediaListRepository;
         private ContentUIModel? _SelectedItem;
         private MediaListModel? _SelectedList;
         private bool _IsPaneOpen;
         private bool _IsWaitLoad = false;
 
         public MediaListViewModel(Action<ContentUIModel?> onSelectedChanged,
-            IContentUIFactory contentFactory)
+            IMediaListRepository mediaListRepository)
         {
             _onSelectedChanged = onSelectedChanged;
-            _contentFactory = contentFactory;
+            _mediaListRepository = mediaListRepository;
 
             PaneOpen = new(() => IsPaneOpen = !IsPaneOpen);
         }
@@ -46,7 +47,7 @@ namespace AvpMediaPlayer.UI.ViewModels
             }
         }
         public LockedObservableCollection<ContentUIModel>? Items { get; } = [];
-        public LockedObservableCollection<MediaListModel>? Lists { get; } = [];
+        public LockedObservableCollection<MediaListModel>? Lists { get; private set; } = [];
         public RelayCommand PaneOpen { get; private set; }
         public bool IsPaneOpen
         {
@@ -65,33 +66,50 @@ namespace AvpMediaPlayer.UI.ViewModels
             Task.Run(() =>
             {
                 using var locker = Lists!.LockChangedEvent();
-                var list = new MediaListModel();
+                MediaListModel? list = null;
                 try
                 {
-                    var contentpaths = items.Select(i => i.TryGetLocalPath());
-                    foreach (var content in _contentFactory.Get(contentpaths!))
-                    {
-                        if (content.IsDirectory)
-                        {
-                            list.Title ??= content.Title;
-                            list.Contents.AddRange(_contentFactory.Get(content.Model!));
-                        }
-                        else
-                        {
-                            list.Title ??= content.Model?.ParentName;
-                            list.Contents.Add(content);
-                        }
-                    }
+                    var contentpaths = items.Select(i => i.TryGetLocalPath()!);
+                    list = _mediaListRepository.New([.. contentpaths]);
                 }
                 finally
                 {
                     Dispatcher.UIThread.Invoke(() =>
                     {
-                        if (list.Contents.Any())
+                        if (list?.Contents.Any() == true)
                         {
                             IsPaneOpen = true;
                             Lists.Add(list);
                             SelectedList = list;
+                        }
+                        IsWaitLoad = false;
+                    });
+                }
+            });
+        }
+        internal void LoadMediaLists()
+        {
+            IsWaitLoad = true;
+            Task.Run(() =>
+            {
+                using var locker = Lists!.LockChangedEvent();
+                MediaListModel[]? lists = null;
+                try
+                {
+                    lists = _mediaListRepository.Get();
+                }
+                finally
+                {
+                    Dispatcher.UIThread.Invoke(() =>
+                    {
+                        if (lists is not null)
+                        {
+                            Lists.Clear();
+                            Lists.AddRange(lists);
+                            if(Lists.Any())
+                            {
+                                SelectedList = Lists[0];
+                            }
                         }
                         IsWaitLoad = false;
                     });

@@ -8,6 +8,7 @@ using AvpMediaPlayer.Core.Helpers;
 using AvpMediaPlayer.Core.Models;
 using AvpMediaPlayer.Media.Models;
 using AvpMediaPlayer.UI.Models;
+using AvpMediaPlayer.UI.Repositories;
 using AvpMediaPlayer.UI.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -26,11 +27,13 @@ namespace AvpMediaPlayer.UI.ViewModels
             var patterns = filter.Patterns?.Select(p => p.Replace("*",""));
             Ribbon = new(async (m) => await OnButtonClick(m));
             Container = new(OnSelectedChanged
-                , new ContentUIFactory(new LocalContentRepository(new LocalContentProvider())
+                , new MediaListRepository(new ContentUIFactory(new LocalContentRepository(new LocalContentProvider())
                 , new MediaContentFactory()
-                , (c) => patterns?.Any(f => c.Url.Contains(f)) == true));
+                , (c) => patterns?.Any(f => c.Url.Contains(f)) == true)));
           
             _filter = filter;
+
+            Container.LoadMediaLists();
         }
         public string? SelectedText 
         { 

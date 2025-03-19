@@ -11,6 +11,6 @@ namespace AvpMediaPlayer.UI.Models
             get => _Title;
             set => SetProperty(ref _Title, value);
         }
-        public LockedObservableCollection<ContentUIModel> Contents { get; } = [];
+        public LockedObservableCollection<ContentUIModel> Contents { get; internal set; } = [];
     }
 }
