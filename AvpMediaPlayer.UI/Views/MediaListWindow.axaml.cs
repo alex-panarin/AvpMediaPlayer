@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using AvpMediaPlayer.UI.ViewModels;
 
 namespace AvpMediaPlayer.UI.Views;
 
@@ -21,6 +22,13 @@ public partial class MediaListWindow : Window
         }
     }
 
+    protected override void OnDataContextEndUpdate()
+    {
+        if (this.DataContext is MediaListViewModel mlv)
+            mlv.LoadMediaLists();
+
+        base.OnDataContextEndUpdate();
+    }
     private void _mainWindow_PositionChanged(object? sender, PixelPointEventArgs e)
     {
         PositionWindow();

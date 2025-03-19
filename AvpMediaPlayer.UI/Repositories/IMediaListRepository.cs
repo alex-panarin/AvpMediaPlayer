@@ -6,6 +6,6 @@ namespace AvpMediaPlayer.UI.Repositories
     {
         MediaListModel[] Get();
         void Add(MediaListModel listModel);
-        MediaListModel New(string[] urls);
+        MediaListModel AddOrUpdate(MediaListModel listModel, string[] urls);
     }
 }

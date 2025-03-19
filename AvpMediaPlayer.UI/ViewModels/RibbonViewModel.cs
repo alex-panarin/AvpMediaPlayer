@@ -21,7 +21,7 @@ namespace AvpMediaPlayer.UI.ViewModels
             RibbonModel.List,
             RibbonModel.AddTrack,
             RibbonModel.AddList,
-            RibbonModel.Open
+            RibbonModel.NewList
         };
         private readonly IEnumerable<RibbonModel> _changableButtons;
 

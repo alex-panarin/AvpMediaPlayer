@@ -16,7 +16,6 @@ namespace AvpMediaPlayer.UI.Repositories
             _dataContext = new DataContext(dbname);
             _contentUIFactory = contentUIFactory;
         }
-
         public MediaListModel[] Get()
         {
             return _dataContext.Get()
@@ -33,28 +32,23 @@ namespace AvpMediaPlayer.UI.Repositories
                 .Select(z => z.Model?.Url!)
                 .ToArray());
         }
-
-        public MediaListModel New(string[] urls)
+        public MediaListModel AddOrUpdate(MediaListModel mediaList, string[] urls)
         {
-            var list = new MediaListModel();
+            var dbList = _dataContext.Add(mediaList.Title!, urls);
+            
             foreach (var content in _contentUIFactory.Get(urls))
             {
-                list.Title ??= content.IsDirectory
-                    ? content.Title
-                    : content.Model?.ParentName;
-
                 if (content.IsDirectory)
                 {
-                    list.Contents.AddRange(_contentUIFactory.Get(content.Model!));
+                    mediaList.Contents.AddRange(_contentUIFactory.Get(content.Model!));
                 }
                 else
                 {
-                    list.Contents.Add(content);
+                    mediaList.Contents.Add(content);
                 }
             }
 
-            _dataContext.Add(list.Title!, list.Contents.Select(x => x.Model!.Url).ToArray());
-            return list;
+            return mediaList;
         }
     }
 }

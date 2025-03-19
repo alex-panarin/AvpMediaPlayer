@@ -25,7 +25,7 @@ namespace AvpMediaPlayer.Data
             list.Name = newName;
             lists.Update(list);
         }
-        public void Add(string listName, string[] media)
+        public MediaList Add(string listName, string[] media)
         {
             using var db = new LiteDatabase(_connectionString);
             var lists = db.GetCollection<MediaList>(dbname);
@@ -36,20 +36,23 @@ namespace AvpMediaPlayer.Data
 
             if (list is null)
             {
-                lists.Insert(new MediaList
+                list = new MediaList
                 {
                     Name = listName,
                     Urls = media
-                });
-                return;
+                };
+                lists.Insert(list);
             }
+            else
+            {
+                var urls = list.Urls
+                    .Union(media)
+                    .ToArray();
 
-            var urls = list.Urls
-                .Union(media)
-                .ToArray();
-
-            list.Urls = urls;
-            lists.Update(list);
+                list.Urls = urls;
+                lists.Update(list);
+            }
+            return list;
         }
         public MediaList? Get(string listName)
         {

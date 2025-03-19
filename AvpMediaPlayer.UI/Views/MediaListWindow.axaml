@@ -20,7 +20,8 @@
 		Width="640"
 		Height="480"
 		CanResize="False"
-		Topmost="True">
+		Topmost="True"
+		Name="ListWindow">
 	
 	<Window.Styles>
 		<Style Selector="TextBlock.list">
@@ -46,6 +47,19 @@
 		<Style Selector="ListBox.items">
 			<Setter Property="AutoScrollToSelectedItem" Value="True"/>
 			<Setter Property="BackgroundSizing" Value="InnerBorderEdge"/>
+		</Style>
+		<Style Selector="ListBox.menu > ListBoxItem">
+			<Setter Property="ContextMenu">
+				<ContextMenu>
+					<MenuItem Header="Изменить"
+							  Command="{Binding ListCommand}"
+							  CommandParameter="rename"/>
+					<Separator />
+					<MenuItem Header="Удалить"
+							  Command="{Binding ListCommand}"
+							  CommandParameter="delete"/>
+				</ContextMenu>													  
+			</Setter>
 		</Style>
 		<Style Selector="SplitView.coral > Border">
 			<Setter Property="BorderBrush" Value="Coral"/>
@@ -163,7 +177,7 @@
 											   HorizontalAlignment="Stretch"
 											   TextAlignment="DetectFromContent"/>
 									<ListBox Grid.Row="1"
-											 Classes="items"
+											 Classes="items menu"
 											 CornerRadius="4"
 											 ItemsSource="{Binding Lists}"
 											 SelectedItem="{Binding SelectedList}">
@@ -173,12 +187,9 @@
 											</ItemsPanelTemplate>
 										</ListBox.ItemsPanel>
 										<ListBox.ItemTemplate>
-											<DataTemplate>
+											<DataTemplate DataType="uimodel:MediaListModel">
 												<TextBlock Text="{Binding Title}"
-														   Margin="5"
-														   ScrollViewer.VerticalScrollBarVisibility="Auto">
-													<TextBox Text="{Binding $parent.Text}"/>
-												</TextBlock>
+														   Margin="5"/>
 											</DataTemplate>
 										</ListBox.ItemTemplate>
 									</ListBox>

@@ -26,6 +26,7 @@ namespace AvpMediaPlayer.UI.ViewModels
 
             PaneOpen = new(() => IsPaneOpen = !IsPaneOpen);
         }
+
         public ContentUIModel? SelectedItem
         { 
             get => _SelectedItem;
@@ -66,11 +67,11 @@ namespace AvpMediaPlayer.UI.ViewModels
             Task.Run(() =>
             {
                 using var locker = Lists!.LockChangedEvent();
-                MediaListModel? list = null;
+                var list = SelectedList;
                 try
                 {
                     var contentpaths = items.Select(i => i.TryGetLocalPath()!);
-                    list = _mediaListRepository.New([.. contentpaths]);
+                    list = _mediaListRepository.AddOrUpdate(list!, [.. contentpaths]);
                 }
                 finally
                 {
@@ -79,7 +80,6 @@ namespace AvpMediaPlayer.UI.ViewModels
                         if (list?.Contents.Any() == true)
                         {
                             IsPaneOpen = true;
-                            Lists.Add(list);
                             SelectedList = list;
                         }
                         IsWaitLoad = false;
@@ -116,5 +116,6 @@ namespace AvpMediaPlayer.UI.ViewModels
                 }
             });
         }
+        
     }
 }

@@ -4,10 +4,10 @@ namespace AvpMediaPlayer.Data
 {
     public interface IDataContext
     {
-        void Add(string listName, string[] media);
-        void Delete(string listName);
+        MediaList Add(string listName, string[] media);
         MediaList[] Get();
         MediaList? Get(string listName);
+        void Delete(string listName);
         void Remove(string listName, string[] media);
         void Rename(string listName, string newName);
     }

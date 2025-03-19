@@ -14,7 +14,7 @@ namespace AvpMediaPlayer.UI.Models
         public const string Pause = "pause";
         public const string List =  "back";
         public const string Show =  "show";
-        public const string Open = "open";
+        public const string NewList = "open";
         public const string AddList = "addfolder";
         public const string AddTrack = "addfiles";
         public const string Separator = "separator";
@@ -23,7 +23,7 @@ namespace AvpMediaPlayer.UI.Models
         {
             (List, "chevron_down_regular", "Список"),
             (Separator, "", ""),
-            (Open, "folder_open_regular", "Открыть"),
+            (NewList, "folder_open_regular", "Открыть"),
             (AddList, "folder_add_regular", "Папку"),
             (AddTrack, "collections_add_regular", "Файлы"),
             (Separator, "", ""),

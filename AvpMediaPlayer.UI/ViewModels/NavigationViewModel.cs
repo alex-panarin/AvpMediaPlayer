@@ -21,19 +21,17 @@ namespace AvpMediaPlayer.UI.ViewModels
         private MediaListWindow? _listWindow;
         private string? _SelectedText;
         private readonly FilePickerFileType _filter;
-
+        const string _NewListName = "Новый список";
         public NavigationViewModel(FilePickerFileType filter)
         {
             var patterns = filter.Patterns?.Select(p => p.Replace("*",""));
             Ribbon = new(async (m) => await OnButtonClick(m));
-            Container = new(OnSelectedChanged
+            MediaList = new(OnSelectedChanged
                 , new MediaListRepository(new ContentUIFactory(new LocalContentRepository(new LocalContentProvider())
                 , new MediaContentFactory()
                 , (c) => patterns?.Any(f => c.Url.Contains(f)) == true)));
           
             _filter = filter;
-
-            Container.LoadMediaLists();
         }
         public string? SelectedText 
         { 
@@ -41,7 +39,7 @@ namespace AvpMediaPlayer.UI.ViewModels
             set => SetProperty(ref _SelectedText, value); 
         }
         public RibbonViewModel Ribbon { get; }
-        public MediaListViewModel Container { get; }
+        public MediaListViewModel MediaList { get; }
         public ContentUIModel? SelectedItem 
         { 
             get => _SelectedItem;
@@ -55,7 +53,7 @@ namespace AvpMediaPlayer.UI.ViewModels
         public RelayCommand? CloseApp { get; set; }
         private async Task OnButtonClick(RibbonModel? model)
         {
-            _listWindow ??= new MediaListWindow() { DataContext = Container };
+            _listWindow ??= new MediaListWindow() { DataContext = MediaList };
 
             switch (model?.Action)
             {
@@ -75,7 +73,7 @@ namespace AvpMediaPlayer.UI.ViewModels
                     break;
                 case RibbonModel.AddTrack:
                 case RibbonModel.AddList:
-                case RibbonModel.Open:
+                case RibbonModel.NewList:
                     await ProcessMediaList(model);
                     break;
                 default:
@@ -84,14 +82,15 @@ namespace AvpMediaPlayer.UI.ViewModels
         }
         private void ProcessNavigationCommand(RibbonModel model)
         {
-            if (SelectedItem is null || Container.Items is null) return;
+            if (SelectedItem is null 
+                || MediaList.Items is null) return;
 
-            int index = Container.Items.IndexOf(SelectedItem);
+            int index = MediaList.Items.IndexOf(SelectedItem);
             var ni = model.Action == RibbonModel.Next ? index + 1 : index - 1;
-            if (ni < 0) ni = Container.Items.Count - 1;
-            if (ni >= Container.Items.Count) ni = 0;
+            if (ni < 0) ni = MediaList.Items.Count - 1;
+            if (ni >= MediaList.Items.Count) ni = 0;
 
-            Container.SelectedItem = Container.Items[ni];
+            MediaList.SelectedItem = MediaList.Items[ni];
         }
         private async Task ProcessMediaList(RibbonModel model)
         {
@@ -102,8 +101,7 @@ namespace AvpMediaPlayer.UI.ViewModels
             
             var startLocation = await provider.TryGetFolderFromPathAsync(@"E:\Music"); // TODO: from Settings
             IReadOnlyList<IStorageItem>? items = null;
-            if (model.Action == RibbonModel.Open
-                || model.Action == RibbonModel.AddList)
+            if (model.Action == RibbonModel.AddList)
             {
                 items = await provider.OpenFolderPickerAsync(new FolderPickerOpenOptions
                 {
@@ -123,10 +121,23 @@ namespace AvpMediaPlayer.UI.ViewModels
                     SuggestedStartLocation = startLocation
                 });
             }
-            
-            if (items?.IsEmpty() == true) return;
+            else if(model.Action == RibbonModel.NewList)
+            {
+                var list = MediaList?.Lists?.FirstOrDefault(x => x.Title == _NewListName);
+                if(list == null)
+                {
+                    list = new MediaListModel
+                    {
+                        Title = _NewListName
+                    };
+                    MediaList?.Lists?.Add(list);
+                }
 
-            Container.AddMediaList(items!);
+                MediaList!.SelectedList = list;
+            }
+            if (items!.IsEmpty() == true) return;
+
+            MediaList.AddMediaList(items!);
         }
         private async Task ProcessMediaCommand(RibbonModel model)
         {
