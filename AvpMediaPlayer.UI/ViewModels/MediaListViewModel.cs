@@ -1,5 +1,6 @@
 ﻿using Avalonia.Platform.Storage;
 using Avalonia.Threading;
+using AvpMediaPlayer.Core.Helpers;
 using AvpMediaPlayer.Core.Interfaces;
 using AvpMediaPlayer.Core.Models;
 using AvpMediaPlayer.UI.Models;
@@ -17,7 +18,9 @@ namespace AvpMediaPlayer.UI.ViewModels
         private MediaListModel? _SelectedList;
         private bool _IsPaneOpen;
         private bool _IsWaitLoad = false;
-
+        const string RenameBeginCmd = "rename_begin";
+        const string RenameEndCmd = "rename_end";
+        const string DeleteCmd = "delete";
         public MediaListViewModel(Action<ContentUIModel?> onSelectedChanged,
             IMediaListRepository mediaListRepository)
         {
@@ -79,6 +82,8 @@ namespace AvpMediaPlayer.UI.ViewModels
                     {
                         if (list?.Contents.Any() == true)
                         {
+                            list.ListCommand = new((c) => OnListCommand(list, c));
+
                             IsPaneOpen = true;
                             SelectedList = list;
                         }
@@ -104,6 +109,8 @@ namespace AvpMediaPlayer.UI.ViewModels
                     {
                         if (lists is not null)
                         {
+                            lists.ForEach(l => l.ListCommand = new((c) => OnListCommand(l, c)));
+
                             Lists.Clear();
                             Lists.AddRange(lists);
                             if(Lists.Any())
@@ -116,6 +123,26 @@ namespace AvpMediaPlayer.UI.ViewModels
                 }
             });
         }
-        
+        internal void OnListCommand(MediaListModel list, string? cmd)
+        {
+            if(cmd == RenameBeginCmd)
+            {
+                _OldTitle = list.Title;
+                list.IsNeedRename = true;
+            }
+            else if(cmd == DeleteCmd)
+            {
+                _mediaListRepository.Delete(list);
+                Lists?.Remove(list);
+                list.ListCommand = null; // Освобождаем ссылку
+            }
+            else if (cmd == RenameEndCmd)
+            {
+                list.IsNeedRename = false;
+                _mediaListRepository.Rename(_OldTitle, list);
+                _OldTitle = null;
+            }
+        }
+        private string? _OldTitle = null;
     }
 }

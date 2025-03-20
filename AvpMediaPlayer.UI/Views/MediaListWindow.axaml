@@ -53,7 +53,7 @@
 				<ContextMenu>
 					<MenuItem Header="Изменить"
 							  Command="{Binding ListCommand}"
-							  CommandParameter="rename"/>
+							  CommandParameter="rename_begin"/>
 					<Separator />
 					<MenuItem Header="Удалить"
 							  Command="{Binding ListCommand}"
@@ -188,8 +188,23 @@
 										</ListBox.ItemsPanel>
 										<ListBox.ItemTemplate>
 											<DataTemplate DataType="uimodel:MediaListModel">
-												<TextBlock Text="{Binding Title}"
-														   Margin="5"/>
+												<Panel Margin="5">
+													<TextBlock Text="{Binding Title}"
+															   IsVisible="{Binding !IsNeedRename}"/>
+													<StackPanel Orientation="Horizontal"
+																IsVisible="{Binding IsNeedRename}"
+																Spacing="2">
+														<TextBox Text="{Binding Title}"
+																 AcceptsReturn="False"
+																 TextWrapping="Wrap"/>
+														<Button Classes="btnMin"
+																Command="{Binding ListCommand}"
+																CommandParameter="rename_end">
+															<PathIcon Data="{StaticResource caret_right_regular}"
+																	  Foreground="Coral"/>
+														</Button>
+													</StackPanel>
+												</Panel>
 											</DataTemplate>
 										</ListBox.ItemTemplate>
 									</ListBox>

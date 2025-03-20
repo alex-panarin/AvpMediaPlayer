@@ -50,5 +50,30 @@ namespace AvpMediaPlayer.UI.Repositories
 
             return mediaList;
         }
+        public void Rename(string? oldName, MediaListModel listModel)
+        {
+            if (oldName is null
+                || oldName == listModel.Title
+                || listModel.Title is null)
+            {
+                return;
+            }
+            
+            var list = _dataContext.Get(oldName);
+            if(list == null)
+            {
+                list = _dataContext.Add(listModel.Title!, [.. listModel.Contents.Select(x => x.Model!.Url)]);
+            }
+            else
+            {
+                _dataContext.Rename(oldName, listModel.Title!);
+            }
+        }
+        public void Delete(MediaListModel list)
+        {
+            if (list?.Title is null) return;
+
+            _dataContext.Delete(list.Title);
+        }
     }
 }

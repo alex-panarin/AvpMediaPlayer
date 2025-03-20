@@ -123,17 +123,18 @@ namespace AvpMediaPlayer.UI.ViewModels
             }
             else if(model.Action == RibbonModel.NewList)
             {
-                var list = MediaList?.Lists?.FirstOrDefault(x => x.Title == _NewListName);
+                var list = MediaList.Lists?.FirstOrDefault(x => x.Title == _NewListName);
                 if(list == null)
                 {
                     list = new MediaListModel
                     {
-                        Title = _NewListName
+                        Title = _NewListName,
                     };
-                    MediaList?.Lists?.Add(list);
+                    list.ListCommand = new((c) => MediaList.OnListCommand(list, c));
+                    MediaList.Lists?.Add(list);
                 }
 
-                MediaList!.SelectedList = list;
+                MediaList.SelectedList = list;
             }
             if (items!.IsEmpty() == true) return;
 
