@@ -15,7 +15,7 @@ namespace MediaConsole.Media.Models
         public IMediaContent? MediaContent { get => _MediaContent; set => OnSetMediaContent(value); }
         protected MediaPlayerBase()
         {
-            _timer.Elapsed += TimerTick;
+            _timer.Elapsed += _timerTick;
         }
         public PlayerState State { get; protected set; }
         protected IVisualizer? Visualizer { get; private set; }
@@ -46,7 +46,7 @@ namespace MediaConsole.Media.Models
         protected abstract void OnPlay();
         protected abstract void OnPause();
         protected abstract void OnStop();
-        private void TimerTick(object? sender, ElapsedEventArgs e)
+        private void _timerTick(object? sender, ElapsedEventArgs e)
         {
             OnTimerCallback();
         }
@@ -72,7 +72,7 @@ namespace MediaConsole.Media.Models
         protected virtual void ManagedDispose()
         {
             _timer.Stop();
-            _timer.Elapsed -= TimerTick;
+            _timer.Elapsed -= _timerTick;
             _timer.Dispose();
         }
         protected virtual void OnTimerCallback()

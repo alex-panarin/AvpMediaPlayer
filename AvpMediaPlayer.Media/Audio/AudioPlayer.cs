@@ -3,7 +3,7 @@ using ManagedBass;
 using MediaConsole.Media.Models;
 using System.Runtime.InteropServices;
 
-namespace AvpMediaPlayer.Media.Models
+namespace AvpMediaPlayer.Media.Audio
 {
     public class AudioPlayer
         : MediaPlayerBase
@@ -100,8 +100,6 @@ namespace AvpMediaPlayer.Media.Models
         protected IMediaData? VisualData { get; private set; }
         public static bool IsInitialized { get; private set; }
         public override IMediaManagement MediaManagement { get ; protected set ; }
-        
-
         protected override void OnPause()
         {
             if (Stream == 0 || State == PlayerState.Pause) return;

@@ -3,7 +3,7 @@ using ManagedBass;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace AvpMediaPlayer.Media.Models
+namespace AvpMediaPlayer.Media.Audio
 {
     public class AudioMediaManagement
         : IMediaManagement

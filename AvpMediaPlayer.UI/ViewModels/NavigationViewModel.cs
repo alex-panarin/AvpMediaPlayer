@@ -19,6 +19,7 @@ namespace AvpMediaPlayer.UI.ViewModels
     {
         private ContentUIModel? _SelectedItem;
         private MediaListWindow? _listWindow;
+        private VisualizationWindow? _visualWindow;
         private string? _SelectedText;
         private readonly FilePickerFileType _filter;
         const string _NewListName = "Новый список";
@@ -54,6 +55,7 @@ namespace AvpMediaPlayer.UI.ViewModels
         private async Task OnButtonClick(RibbonModel? model)
         {
             _listWindow ??= new MediaListWindow() { DataContext = MediaList };
+            _visualWindow ??= new VisualizationWindow() { DataContext = MediaList };
 
             switch (model?.Action)
             {
@@ -70,6 +72,7 @@ namespace AvpMediaPlayer.UI.ViewModels
                     ProcessNavigationCommand(model);
                     break;
                 case RibbonModel.Show:
+                    _visualWindow.IsVisible = !_visualWindow.IsVisible;
                     break;
                 case RibbonModel.AddTrack:
                 case RibbonModel.AddList:

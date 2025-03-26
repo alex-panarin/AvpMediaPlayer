@@ -19,7 +19,7 @@
 		WindowState="Normal"
 		WindowStartupLocation="CenterScreen"
 		Width="640"
-		Height="80"
+		Height="86"
 		CanResize="False"
 		Topmost="True">
 
@@ -28,7 +28,7 @@
     </Design.DataContext>
 
 	<Panel Name="panel">
-		<Grid RowDefinitions="30, 44">
+		<Grid RowDefinitions="36, 44">
 			<Border Grid.Row="0"
 					BorderBrush="Coral"
 					BorderThickness="2,2,2,0"

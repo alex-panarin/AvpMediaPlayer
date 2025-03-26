@@ -7,5 +7,6 @@
 
         void ClearStream();
         void SetStream(int stream);
+        void InvokeUpdate();
     }
 }
