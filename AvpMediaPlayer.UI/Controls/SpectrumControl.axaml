@@ -6,27 +6,30 @@
 			 xmlns:convert="using:AvpMediaPlayer.UI.Converters"
              mc:Ignorable="d" d:DesignWidth="280" d:DesignHeight="82"
              x:Class="AvpMediaPlayer.UI.Controls.SpectrumControl"
-	         x:DataType="audio:AudioVisualData"
+	         x:DataType="audio:AudioVisualizer"
 			 Height="80"
 			 Width="280">
 	
 	<Design.DataContext>
-		<audio:AudioVisualData />
+		<audio:AudioVisualizer />
 	</Design.DataContext>
 	
 		<UserControl.Styles>
 		<Style Selector="Rectangle.level">
 			<Setter Property="Fill">
-				<LinearGradientBrush StartPoint="100%, 50%" 
-									 EndPoint="50%, 0%">
+				<LinearGradientBrush StartPoint="0%, 50%" 
+									 EndPoint="100%, 50%">
 					<GradientStops>
-						<GradientStop Color="DarkGreen" Offset="0"/>
-						<GradientStop Color="Green" Offset="0.2"/>
-						<GradientStop Color="LimeGreen" Offset="0.4"/>
-						<GradientStop Color="Lime" Offset="0.6"/>
-						<GradientStop Color="GreenYellow" Offset="0.8"/>
+						<GradientStop Color="DarkGreen" Offset="0.1"/>
+						<GradientStop Color="Green" Offset="0.3"/>
+						<GradientStop Color="LimeGreen" Offset="0.5"/>
+						<GradientStop Color="Lime" Offset="0.7"/>
+						<GradientStop Color="GreenYellow" Offset="0.9"/>
 					</GradientStops>
 				</LinearGradientBrush>
+			</Setter>
+			<Setter Property="RenderTransform">
+				<RotateTransform Angle="180"/>
 			</Setter>
 		</Style>
 	</UserControl.Styles>
@@ -43,11 +46,11 @@
 						Background="Transparent"
 						VerticalAlignment="Bottom">
 				<Rectangle Classes="level"
-						   Width="18"
-						   Height="{Binding Levels[0]}"/>
+						   Name="levelLeft"
+						   Width="18"/>
 				<Rectangle Classes="level"
-						   Width="18"
-						   Height="{Binding Levels[1]}"/>
+						   Name="levelRight"
+						   Width="18"/>
 			</StackPanel>
 		</Grid>
 	</Panel>

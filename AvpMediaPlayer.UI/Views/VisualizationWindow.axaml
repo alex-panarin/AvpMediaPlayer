@@ -7,7 +7,7 @@
         mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="82"
         x:Class="AvpMediaPlayer.UI.Views.VisualizationWindow"
         Title="VisualizationWindow"
-		x:DataType="audio:AudioVisualData"
+		x:DataType="audio:AudioVisualizer"
 		Background="Transparent"
 		BorderThickness="0"
 		BorderBrush="Transparent"
@@ -21,7 +21,7 @@
 		CanResize="False"
 		Topmost="True">
 	<Design.DataContext>
-		<audio:AudioVisualData/>
+		<audio:AudioVisualizer/>
 	</Design.DataContext>
 	
 	<Panel>
@@ -30,7 +30,8 @@
 				BorderThickness="2,2,2,2"
 				CornerRadius="6,6,6,6"
 				Opacity="1">
-			<controls:SpectrumControl Spectrum="{Binding Spectrum}"
+			<controls:SpectrumControl Spectrum="{Binding Spectrums[0]}"
+									  Levels="{Binding Levels}"
 			  					      VerticalAlignment="Bottom"
 								      HorizontalAlignment="Center"/>
 			</Border>

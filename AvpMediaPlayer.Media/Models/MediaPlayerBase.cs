@@ -12,14 +12,18 @@ namespace MediaConsole.Media.Models
         private bool _disposedValue;
         private IMediaContent? _MediaContent;
         private readonly System.Timers.Timer _timer = new(TIMER_MS) { AutoReset = true };
-        public IMediaContent? MediaContent { get => _MediaContent; set => OnSetMediaContent(value); }
+        public IMediaContent? MediaContent
+        { 
+            get => _MediaContent; 
+            set => OnSetMediaContent(value); 
+        }
         protected MediaPlayerBase()
         {
             _timer.Elapsed += _timerTick;
         }
         public PlayerState State { get; protected set; }
-        protected IVisualizer? Visualizer { get; private set; }
-        public abstract IMediaManagement MediaManagement { get; protected set; }
+        public IVisualizer? Visualizer { get; set; }
+        public IMediaManagement? MediaManagement { get; set; }
         protected void StopTimer() => _timer.Stop();
         void IMediaPlayer.Pause()
         {
@@ -38,10 +42,6 @@ namespace MediaConsole.Media.Models
             StopTimer();
             OnStop();
             State = PlayerState.Stop;
-        }
-        void IMediaPlayer.SetVisualizer(IVisualizer visualizer)
-        {
-            Visualizer = visualizer;
         }
         protected abstract void OnPlay();
         protected abstract void OnPause();
@@ -77,7 +77,7 @@ namespace MediaConsole.Media.Models
         }
         protected virtual void OnTimerCallback()
         {
-            
+            Visualizer?.Visualize();    
         }
         protected virtual void UnmanagedDispose()
         {

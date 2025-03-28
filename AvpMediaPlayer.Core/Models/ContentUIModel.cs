@@ -36,5 +36,6 @@ namespace AvpMediaPlayer.Core.Models
         public bool IsDirectory => Model?.IsDirectory == true;
         public string? Type => IsDirectory ? "" : Path.GetExtension(Model?.Name);
         public string? Duration => _mediaContent?.Tag?.Duration?.ToString(@"hh\:mm\:ss");
+        public IMediaContent? MediaContent => _mediaContent;
     }
 }

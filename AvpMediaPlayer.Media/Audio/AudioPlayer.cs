@@ -64,13 +64,12 @@ namespace AvpMediaPlayer.Media.Audio
             .Union(_plugins!
             .Select(p => string.Join("; ", $"{p.Value.Formats[0].FileExtensions}")))
             .ToArray();
-
-        public static AudioPlayer Instance { get; } = new AudioPlayer();
-        protected AudioPlayer() 
+        public AudioPlayer(IMediaManagement mediaManagement, IVisualizer visualizer) 
             : base()
         {
             _syncContext = SynchronizationContext.Current;
-            MediaManagement = new AudioMediaManagement(() => IsInitialized, () => Stream);
+            MediaManagement = mediaManagement;
+            Visualizer = visualizer;
         }
 
         protected int Stream
@@ -89,7 +88,7 @@ namespace AvpMediaPlayer.Media.Audio
                         if (!Bass.ChannelHasFlag(_Stream, BassFlags.Loop))
                         {
                             StopTimer();
-                            VisualData?.ClearStream();
+                            Visualizer?.ClearStream();
                             State = PlayerState.Stop;
                         }
                     }
@@ -97,9 +96,7 @@ namespace AvpMediaPlayer.Media.Audio
                 }));
             } 
         } 
-        protected IMediaData? VisualData { get; private set; }
         public static bool IsInitialized { get; private set; }
-        public override IMediaManagement MediaManagement { get ; protected set ; }
         protected override void OnPause()
         {
             if (Stream == 0 || State == PlayerState.Pause) return;
@@ -118,16 +115,9 @@ namespace AvpMediaPlayer.Media.Audio
                 
                 if (Visualizer is not null)
                 {
-                    ChannelInfo cInfo;
-                    Bass.ChannelGetInfo(Stream, out cInfo);
-
-                    var info = Visualizer.Info;
-                    if (VisualData is null && info is not null)
-                    {
-                        VisualData = new AudioVisualData(info.Level, info.Points);
-                    }
-                    VisualData?.SetStream(Stream);
-                    MediaManagement.CallDurationChange();
+                    MediaManagement?.CallDurationChange();
+                    MediaManagement?.SetStream(Stream);
+                    Visualizer.SetStream(Stream);
                 }
             }
 
@@ -147,14 +137,16 @@ namespace AvpMediaPlayer.Media.Audio
         }
         protected override void OnTimerCallback()
         {
-            if (VisualData is not null)
+            _syncContext?.Post((cb) =>
             {
-                MediaManagement?.CallPositionChange();
-                Visualizer?.VisualizeLevels(VisualData.Levels);
-                Visualizer?.VisualizeChannels(VisualData.Spectrums);
-            }
-            if(State == PlayerState.Stop)
-                VisualData?.ClearStream();
+                if (Visualizer is not null)
+                {
+                    MediaManagement?.CallPositionChange();
+                    Visualizer?.Visualize();
+                }
+                if (State == PlayerState.Stop)
+                    Visualizer?.ClearStream();
+            }, null);
         }
         protected override void UnmanagedDispose()
         {

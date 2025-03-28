@@ -8,16 +8,29 @@ namespace AvpMediaPlayer.UI.Controls;
 public partial class SpectrumControl : UserControl
 {
     public readonly static DirectProperty<SpectrumControl, double[]?> SpectrumProperty =
-        AvaloniaProperty.RegisterDirect<SpectrumControl, double[]?>(nameof(Spectrum), (c) => c._Spectrum);
+        AvaloniaProperty.RegisterDirect<SpectrumControl, double[]?>(nameof(Spectrum), (c) => c.Spectrum, (c, v) => c.Spectrum = v);
+    public readonly static DirectProperty<SpectrumControl, double[]?> LevelsProperty =
+        AvaloniaProperty.RegisterDirect<SpectrumControl, double[]?>(nameof(Levels), (c) => c.Levels, (c, v) => c.Levels = v);
 
     private readonly Pen _linePen = new(new SolidColorBrush(Colors.LimeGreen), 0.8d);
     private double[]? _Spectrum;
-
+    private double[]? _Levels;
     public SpectrumControl()
     {
         InitializeComponent();
     }
 
+    public double[]? Levels
+    {
+        get => _Levels;
+        set
+        {
+            var height = container.Bounds.Height;
+            SetAndRaise(LevelsProperty, ref _Levels, value);
+            levelLeft.Height = _Levels != null ? _Levels[0] * height : 1d;
+            levelRight.Height = _Levels != null ? _Levels[1] * height : 1d;
+        }
+    }
     public double[]? Spectrum 
     { 
         get => _Spectrum; 

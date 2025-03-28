@@ -10,12 +10,12 @@ namespace AvpMediaPlayer.Media.Interfaces
     }
     public interface IMediaPlayer
     {
-        IMediaManagement MediaManagement { get; }
+        IMediaManagement? MediaManagement { get; set; }
+        IVisualizer? Visualizer { get; set; }
         IMediaContent? MediaContent { get; set; }
         PlayerState State { get; }
         void Play();
         void Stop();
         void Pause();
-        void SetVisualizer(IVisualizer visualizer);
     }
 }

@@ -6,9 +6,9 @@ using System.Runtime.CompilerServices;
 
 namespace AvpMediaPlayer.Media.Audio
 {
-    public class AudioVisualData
-        : IMediaData
-        , INotifyPropertyChanged
+    public class AudioVisualizer
+        : INotifyPropertyChanged
+        , IVisualizer
     {
         private int _stream;
         private readonly int _points;
@@ -20,13 +20,13 @@ namespace AvpMediaPlayer.Media.Audio
         protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
             => PropertyChanged?.Invoke(this, new(propertyName));
 
-        public AudioVisualData()
-            :this(80, 20, false)
+        public AudioVisualizer()
+            :this(80, 512, false)
         {
         }
-        public AudioVisualData(double scale, int pounts = 0, bool stereo = true)
+        public AudioVisualizer(double scale, int pounts = 0, bool stereo = true)
         {
-            _signalProvider = new SignalProvider(DataFlags.FFT256, true, stereo) { WindowType = WindowType.Hanning };
+            _signalProvider = new SignalProvider(DataFlags.FFT1024, true, stereo) { WindowType = WindowType.Hanning };
             _points = pounts;
             _scale = scale;
         }
@@ -34,17 +34,17 @@ namespace AvpMediaPlayer.Media.Audio
         public void ClearStream()
         {
             _stream = 0;
-            InvokeUpdate();
+            Visualize();
         }
         public void SetStream(int stream)
         {
             _stream = stream; 
             _signalProvider?.SetChannel(stream);
         }
-        public void InvokeUpdate()
+        public void Visualize()
         {
-            OnPropertyChanged(nameof(Spectrums));
             OnPropertyChanged(nameof(Levels));
+            OnPropertyChanged(nameof(Spectrums));
         }
 
         protected double LeftLevel
@@ -65,16 +65,7 @@ namespace AvpMediaPlayer.Media.Audio
                 return (double)rightLevel / short.MaxValue;
             }
         }
-        public double[] Spectrum
-        {
-            get { 
-                    return _stream == 0
-                        ? Enumerable.Range(0, _points).Select(p => 5d).ToArray()
-                        : _signalProvider!.DataSampleWindowed.First()
-                            .DivideToParts(_points == 0 ? defaultPoints : _points)
-                                .AdjustToScale(0, _scale, true, out _).Data;
-                }
-        }
+
         public double[][] Spectrums
         { 
             get
@@ -84,7 +75,7 @@ namespace AvpMediaPlayer.Media.Audio
                     : [.. _signalProvider!.DataSampleWindowed
                         .Select(channelData => 
                             channelData.DivideToParts(_points == 0 ? defaultPoints : _points)
-                            .AdjustToScale(0, _scale, true, out _).Data)];
+                            .AdjustToScale(1, _scale, true, out _).Data)];
             }
         }
         public double[] Levels => [LeftLevel != 0 ? LeftLevel : 5d , RightLevel != 0 ? RightLevel : 5d];

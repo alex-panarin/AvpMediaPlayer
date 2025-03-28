@@ -6,6 +6,8 @@ using Avalonia.Platform.Storage;
 using AvpMediaPlayer.Core;
 using AvpMediaPlayer.Core.Helpers;
 using AvpMediaPlayer.Core.Models;
+using AvpMediaPlayer.Media.Audio;
+using AvpMediaPlayer.Media.Interfaces;
 using AvpMediaPlayer.Media.Models;
 using AvpMediaPlayer.UI.Models;
 using AvpMediaPlayer.UI.Repositories;
@@ -20,6 +22,9 @@ namespace AvpMediaPlayer.UI.ViewModels
         private ContentUIModel? _SelectedItem;
         private MediaListWindow? _listWindow;
         private VisualizationWindow? _visualWindow;
+        private IMediaPlayer _mediaPlayer;
+        private IMediaManagement _mediaManagement;
+        private IVisualizer _visualizer;
         private string? _SelectedText;
         private readonly FilePickerFileType _filter;
         const string _NewListName = "Новый список";
@@ -33,6 +38,9 @@ namespace AvpMediaPlayer.UI.ViewModels
                 , (c) => patterns?.Any(f => c.Url.Contains(f)) == true)));
           
             _filter = filter;
+            _mediaManagement = new AudioMediaManagement();
+            _visualizer = new AudioVisualizer();
+            _mediaPlayer = new AudioPlayer(_mediaManagement, _visualizer);
         }
         public string? SelectedText 
         { 
@@ -49,13 +57,15 @@ namespace AvpMediaPlayer.UI.ViewModels
                 SetProperty(ref _SelectedItem, value);
                 Ribbon.SelectedItem = _SelectedItem;
                 SelectedText = _SelectedItem?.Title;
+                if(_SelectedItem is not null)
+                    _mediaPlayer.MediaContent = _SelectedItem.MediaContent;
             } 
         }
         public RelayCommand? CloseApp { get; set; }
         private async Task OnButtonClick(RibbonModel? model)
         {
             _listWindow ??= new MediaListWindow() { DataContext = MediaList };
-            _visualWindow ??= new VisualizationWindow() { DataContext = MediaList };
+            _visualWindow ??= new VisualizationWindow() { DataContext = _visualizer };
 
             switch (model?.Action)
             {
@@ -145,6 +155,18 @@ namespace AvpMediaPlayer.UI.ViewModels
         }
         private async Task ProcessMediaCommand(RibbonModel model)
         {
+            switch(model.Action)
+            {
+                case RibbonModel.Stop:
+                    _mediaPlayer.Stop();
+                    break;
+                case RibbonModel.Play:
+                    _mediaPlayer.Play();
+                    break;
+                case RibbonModel.Pause:
+                    _mediaPlayer.Pause();
+                    break;
+            }
             await Task.CompletedTask;
         }
         private void OnSelectedChanged(ContentUIModel? item)

@@ -9,79 +9,71 @@ namespace AvpMediaPlayer.Media.Audio
         : IMediaManagement
         , INotifyPropertyChanged
     {
-        private readonly Func<bool> _isMediaInit;
-        private readonly Func<int> _getStream;
         private double _Volume = 0.5d;
         private bool _LoopTrack = false;
         private bool _LoopCatalog = false;
-        public AudioMediaManagement(Func<bool> isMediaInit, Func<int> getStream)
+        public AudioMediaManagement()
         {
-            _isMediaInit = isMediaInit;
-            _getStream = getStream;
+            
         }
 
-        public double Volume 
-        { 
-            get => _Volume; 
-            set 
+        public double Volume
+        {
+            get => _Volume;
+            set
             {
-                if (!IsInitialize 
+                if (Stream == 0
                     || !Bass.ChannelSetAttribute(Stream, ChannelAttribute.Volume, value))
-                        return;
+                    return;
 
                 _Volume = value;
-            } 
+            }
         }
-        public bool LoopTrack 
-        { 
-            get => _LoopTrack; 
-            set 
+        public bool LoopTrack
+        {
+            get => _LoopTrack;
+            set
             {
-                if (!IsInitialize || (value
-                    ? !Bass.ChannelAddFlag(Stream, BassFlags.Loop) 
+                if (Stream == 0 || (value
+                    ? !Bass.ChannelAddFlag(Stream, BassFlags.Loop)
                     : !Bass.ChannelRemoveFlag(Stream, BassFlags.Loop)))
                     return;
 
                 _LoopTrack = value;
-            } 
+            }
         }
-        public bool LoopCatalog 
-        { 
+        public bool LoopCatalog
+        {
             get => _LoopCatalog;
             set => _LoopCatalog = value;
         }
         public double Duration
         {
-            get => !IsInitialize
-                ? 0d
-                : Bass.ChannelBytes2Seconds(Stream, Bass.ChannelGetLength(Stream));
+            get => Stream == 0 ? 0d : Bass.ChannelBytes2Seconds(Stream, Bass.ChannelGetLength(Stream));
         }
-        public double Position 
+        public double Position
         {
-            get => !IsInitialize 
-                ? 0d
-                : Bass.ChannelBytes2Seconds(Stream, Bass.ChannelGetPosition(Stream));
+            get => Stream == 0 ? 0d : Bass.ChannelBytes2Seconds(Stream, Bass.ChannelGetPosition(Stream));
             set => Bass.ChannelSetPosition(Stream, Bass.ChannelSeconds2Bytes(Stream, value));
         }
-        private int Stream => _getStream();
-        private bool IsInitialize  => _isMediaInit();
-
-        public event PropertyChangedEventHandler? PropertyChanged;
+        private int Stream { get;  set; }
 
         public void CallDurationChange()
         {
             OnPropertyChanged(nameof(Duration));
         }
-
         public void CallPositionChange()
         {
             OnPropertyChanged(nameof(Position));
         }
-
+        public void SetStream(int stream)
+        {
+            Stream = stream;    
+        }
         private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new(propertyName));
         }
-        
+        public event PropertyChangedEventHandler? PropertyChanged;
     }
 }

@@ -8,6 +8,7 @@
         public double Duration { get; }
         public double Position { get; set; }
 
+        void SetStream(int stream);
         void CallDurationChange();
         void CallPositionChange();
     }
