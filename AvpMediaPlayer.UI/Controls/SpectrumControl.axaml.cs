@@ -1,7 +1,9 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Shapes;
 using Avalonia.Media;
 using AvpMediaPlayer.Core.Helpers;
+
 
 namespace AvpMediaPlayer.UI.Controls;
 
@@ -13,8 +15,10 @@ public partial class SpectrumControl : UserControl
         AvaloniaProperty.RegisterDirect<SpectrumControl, double[]?>(nameof(Levels), (c) => c.Levels, (c, v) => c.Levels = v);
 
     private readonly Pen _linePen = new(new SolidColorBrush(Colors.LimeGreen), 0.8d);
+  
     private double[]? _Spectrum;
     private double[]? _Levels;
+  
     public SpectrumControl()
     {
         InitializeComponent();
@@ -25,10 +29,14 @@ public partial class SpectrumControl : UserControl
         get => _Levels;
         set
         {
-            var height = container.Bounds.Height;
             SetAndRaise(LevelsProperty, ref _Levels, value);
-            levelLeft.Height = _Levels != null ? _Levels[0] * height : 1d;
-            levelRight.Height = _Levels != null ? _Levels[1] * height : 1d;
+            
+            if (_Levels != null)
+            {
+                var height = container.Bounds.Height;
+                levelLeft.Height = _Levels[0] * height;
+                levelRight.Height = _Levels[1] * height;
+            }
         }
     }
     public double[]? Spectrum 
@@ -39,6 +47,11 @@ public partial class SpectrumControl : UserControl
             SetAndRaise(SpectrumProperty, ref _Spectrum, value);
             InvalidateVisual();
         } 
+    }
+
+    protected override void OnDataContextEndUpdate()
+    {
+        base.OnDataContextEndUpdate();
     }
     public override void Render(DrawingContext context)
     {

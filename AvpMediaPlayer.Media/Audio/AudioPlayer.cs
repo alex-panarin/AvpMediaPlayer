@@ -139,7 +139,7 @@ namespace AvpMediaPlayer.Media.Audio
         {
             _syncContext?.Post((cb) =>
             {
-                if (Visualizer is not null)
+                if (State == PlayerState.Play)
                 {
                     MediaManagement?.CallPositionChange();
                     Visualizer?.Visualize();

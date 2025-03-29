@@ -2,23 +2,21 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-			 xmlns:audio="using:AvpMediaPlayer.Media.Audio"
-			 xmlns:convert="using:AvpMediaPlayer.UI.Converters"
              mc:Ignorable="d" d:DesignWidth="280" d:DesignHeight="82"
              x:Class="AvpMediaPlayer.UI.Controls.SpectrumControl"
-	         x:DataType="audio:AudioVisualizer"
-			 Height="80"
+			 Height="82"
 			 Width="280">
 	
-	<Design.DataContext>
-		<audio:AudioVisualizer />
-	</Design.DataContext>
-	
 		<UserControl.Styles>
-		<Style Selector="Rectangle.level">
+		<Style Selector="StackPanel.level">
+			<Setter Property="RenderTransform">
+				<RotateTransform Angle="180"/>
+			</Setter>
+		</Style>
+		<Style Selector="Rectangle.levels">
 			<Setter Property="Fill">
-				<LinearGradientBrush StartPoint="0%, 50%" 
-									 EndPoint="100%, 50%">
+				<LinearGradientBrush StartPoint="50% 0%" 
+									 EndPoint="50% 100%">
 					<GradientStops>
 						<GradientStop Color="DarkGreen" Offset="0.1"/>
 						<GradientStop Color="Green" Offset="0.3"/>
@@ -28,9 +26,7 @@
 					</GradientStops>
 				</LinearGradientBrush>
 			</Setter>
-			<Setter Property="RenderTransform">
-				<RotateTransform Angle="180"/>
-			</Setter>
+			<Setter Property="VerticalAlignment" Value="Top"/>
 		</Style>
 	</UserControl.Styles>
 	<Panel>
@@ -39,17 +35,18 @@
 			<Panel Name="container"
 				   VerticalAlignment="Stretch"
 				   HorizontalAlignment="Stretch"
-				   Margin="2"/>
+				   Height="80"/>
 			<StackPanel Grid.Column="1"
+						Classes="level"
 						Orientation="Horizontal"
 						Spacing="4"
 						Background="Transparent"
-						VerticalAlignment="Bottom">
-				<Rectangle Classes="level"
-						   Name="levelLeft"
+						Height="80">
+				<Rectangle Name="levelLeft"
+						   Classes="levels"
 						   Width="18"/>
-				<Rectangle Classes="level"
-						   Name="levelRight"
+				<Rectangle Name="levelRight"
+						   Classes="levels"
 						   Width="18"/>
 			</StackPanel>
 		</Grid>

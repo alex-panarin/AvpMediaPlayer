@@ -10,7 +10,7 @@ namespace AvpMediaPlayer.Media.Audio
         : INotifyPropertyChanged
         , IVisualizer
     {
-        private int _stream;
+        private int _stream = 0;
         private readonly int _points;
         private readonly double _scale;
         private readonly SignalProvider? _signalProvider;
@@ -21,7 +21,7 @@ namespace AvpMediaPlayer.Media.Audio
             => PropertyChanged?.Invoke(this, new(propertyName));
 
         public AudioVisualizer()
-            :this(80, 512, false)
+            :this(78, 512, false)
         {
         }
         public AudioVisualizer(double scale, int pounts = 0, bool stereo = true)
@@ -71,14 +71,18 @@ namespace AvpMediaPlayer.Media.Audio
             get
             {
                 return _stream == 0
-                    ? [[..Enumerable.Range(0, _points).Select(p => p * 10d)], [..Enumerable.Range(0, _points).Select( p => p * 20d)]]
+                    ? [[..Enumerable.Range(0, _points).Select(p => 10d)], [..Enumerable.Range(0, _points).Select( p => 10d)]]
                     : [.. _signalProvider!.DataSampleWindowed
                         .Select(channelData => 
                             channelData.DivideToParts(_points == 0 ? defaultPoints : _points)
                             .AdjustToScale(1, _scale, true, out _).Data)];
             }
         }
-        public double[] Levels => [LeftLevel != 0 ? LeftLevel : 5d , RightLevel != 0 ? RightLevel : 5d];
+        public double[] Levels => 
+            [
+                _stream != 0 && LeftLevel != 0 ? LeftLevel : 0.5d ,
+                _stream != 0 && RightLevel != 0 ? RightLevel : 0.5d
+            ];
         public int Points => _points;
         public double Height => _scale;
 

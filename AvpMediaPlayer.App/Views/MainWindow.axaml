@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:controls="using:AvpMediaPlayer.UI.Controls"
-        mc:Ignorable="d" d:DesignWidth="640" d:DesignHeight="80"
+        mc:Ignorable="d" d:DesignWidth="640" d:DesignHeight="86"
         x:Class="AvpMediaPlayer.App.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
@@ -19,7 +19,7 @@
 		WindowState="Normal"
 		WindowStartupLocation="CenterScreen"
 		Width="640"
-		Height="86"
+		Height="84"
 		CanResize="False"
 		Topmost="True">
 
@@ -28,7 +28,7 @@
     </Design.DataContext>
 
 	<Panel Name="panel">
-		<Grid RowDefinitions="36, 44">
+		<Grid RowDefinitions="36, 46">
 			<Border Grid.Row="0"
 					BorderBrush="Coral"
 					BorderThickness="2,2,2,0"
