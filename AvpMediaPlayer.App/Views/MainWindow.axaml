@@ -7,7 +7,7 @@
         mc:Ignorable="d" d:DesignWidth="640" d:DesignHeight="86"
         x:Class="AvpMediaPlayer.App.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Icon="/Assets/avalonia-logo.ico"
+        Icon="/Assets/avpmediaplayer.ico"
         Title="AvpMediaPlayer.App"
 		Background="Transparent"
 		BorderThickness="0"
@@ -34,7 +34,7 @@
 					BorderThickness="2,2,2,0"
 					CornerRadius="6,6,0,0"
 					Opacity="1">
-				<Grid ColumnDefinitions="*, 100">
+				<Grid ColumnDefinitions="*, 60">
 					<TextBlock HorizontalAlignment="Left"
 							   VerticalAlignment="Center"
 							   Margin="4,0"
@@ -43,8 +43,8 @@
 							<PathIcon Data="{StaticResource music_regular}"
 									  HorizontalAlignment="Left"
 									  Foreground="Coral"/>
-							<Label Content="{Binding Navigation.SelectedText}">
-						</Label>
+							<Label Content="{Binding Navigation.SelectedText}"
+								   MaxWidth="540"/>
 					</TextBlock>
 					<Button Grid.Column="1"
 							Classes="btnMin"

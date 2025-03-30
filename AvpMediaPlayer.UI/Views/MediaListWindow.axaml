@@ -110,7 +110,10 @@
 					  VerticalAlignment="Center">
 					<TextBlock Grid.Column="1" 
 							   Classes="list"
-							   Text="Наименование"/>
+							   Text="Наименование"
+							   MaxWidth="240"
+							   TextWrapping="WrapWithOverflow"
+							   TextTrimming=" "/>
 					<PathIcon Grid.Column="2"
 							  Data="{StaticResource music_regular}"
 							  Foreground="Coral"
@@ -195,8 +198,7 @@
 																IsVisible="{Binding IsNeedRename}"
 																Spacing="2">
 														<TextBox Text="{Binding Title}"
-																 AcceptsReturn="False"
-																 TextWrapping="Wrap"/>
+																 AcceptsReturn="False"/>
 														<Button Classes="btnMin"
 																Command="{Binding ListCommand}"
 																CommandParameter="rename_end">
@@ -233,7 +235,10 @@
 										<Grid ColumnDefinitions="*, 40, 40, 100">
 											<TextBlock Grid.Column="0"
 														Classes="list"
-														Text="{Binding Title}"/>
+														Text="{Binding Title}"
+														TextWrapping="WrapWithOverflow"
+														MaxWidth="240"
+													    TextTrimming=" "/>
 											<PathIcon Grid.Column="1"
 														Data="{StaticResource music_regular}"
 														Foreground="Coral"

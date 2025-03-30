@@ -100,12 +100,12 @@ namespace AvpMediaPlayer.UI.ViewModels
             var ni = model.Action == RibbonModel.Next ? 1 : - 1;
             ((INavigation)this).NavigateNextItem(ni);
         }
-        void INavigation.NavigateNextItem(int newIndex)
+        void INavigation.NavigateNextItem(int offset)
         {
             if (SelectedItem is null
                 || MediaList.Items is null) return;
 
-            int index = MediaList.Items.IndexOf(SelectedItem) + newIndex;
+            int index = MediaList.Items.IndexOf(SelectedItem) + offset;
             if (index < 0) index = MediaList.Items.Count - 1;
             if (index >= MediaList.Items.Count) index = 0;
 
