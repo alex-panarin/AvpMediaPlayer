@@ -14,6 +14,7 @@ namespace AvpMediaPlayer.UI.Models
         public const string Pause = "pause";
         public const string List =  "back";
         public const string Show =  "show";
+        public const string Sets = "sets";
         public const string NewList = "open";
         public const string AddList = "addfolder";
         public const string AddTrack = "addfiles";
@@ -21,11 +22,13 @@ namespace AvpMediaPlayer.UI.Models
 
         public static (string, string, string)[] Buttons =
         {
-            (List, "chevron_down_regular", "Список"),
+            (List, "apps_list_regular", "Список"),
             (Separator, "", ""),
             (NewList, "folder_open_regular", "Открыть"),
             (AddList, "folder_add_regular", "Папку"),
             (AddTrack, "collections_add_regular", "Файлы"),
+            (Separator, "", ""),
+            (Sets, "settings_regular", "Настройки"),
             (Separator, "", ""),
             (Stop, "stop_regular", "Стоп"),
             (Play, "play_regular", "Играть"),
@@ -34,6 +37,7 @@ namespace AvpMediaPlayer.UI.Models
             (Next, "caret_right_regular", "Вперед"),
             (Separator, "", ""),
             (Show, "device_eq_regular", "Просмотр"),
+           
         };
         private bool? _IsEnabled = true;
         private bool? _IsVisible = false;

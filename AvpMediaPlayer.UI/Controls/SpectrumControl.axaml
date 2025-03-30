@@ -8,12 +8,12 @@
 			 Width="280">
 	
 		<UserControl.Styles>
-		<Style Selector="StackPanel.level">
+		<Style Selector="StackPanel.levels">
 			<Setter Property="RenderTransform">
 				<RotateTransform Angle="180"/>
 			</Setter>
 		</Style>
-		<Style Selector="Rectangle.levels">
+		<Style Selector="Rectangle.level">
 			<Setter Property="Fill">
 				<LinearGradientBrush StartPoint="50% 0%" 
 									 EndPoint="50% 100%">
@@ -37,16 +37,16 @@
 				   HorizontalAlignment="Stretch"
 				   Height="80"/>
 			<StackPanel Grid.Column="1"
-						Classes="level"
+						Classes="levels"
 						Orientation="Horizontal"
 						Spacing="4"
 						Background="Transparent"
 						Height="80">
 				<Rectangle Name="levelLeft"
-						   Classes="levels"
+						   Classes="level"
 						   Width="18"/>
 				<Rectangle Name="levelRight"
-						   Classes="levels"
+						   Classes="level"
 						   Width="18"/>
 			</StackPanel>
 		</Grid>

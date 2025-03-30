@@ -21,7 +21,8 @@ namespace AvpMediaPlayer.UI.ViewModels
             RibbonModel.List,
             RibbonModel.AddTrack,
             RibbonModel.AddList,
-            RibbonModel.NewList
+            RibbonModel.NewList,
+            RibbonModel.Sets
         };
         private readonly IEnumerable<RibbonModel> _changableButtons;
 
@@ -40,7 +41,7 @@ namespace AvpMediaPlayer.UI.ViewModels
             Buttons
                 .ForEach((b, i) =>
                 {
-                    b.IsVisible = i == 1 || _allwaysVisible.Any(a => a == b.Action);
+                    b.IsVisible = i == 1 || i == 5 || _allwaysVisible.Any(a => a == b.Action);
                 });
 
             _changableButtons = Buttons

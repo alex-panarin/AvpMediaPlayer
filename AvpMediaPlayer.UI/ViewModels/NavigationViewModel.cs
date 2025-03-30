@@ -17,7 +17,9 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace AvpMediaPlayer.UI.ViewModels
 {
-    public class NavigationViewModel : ObservableObject
+    public class NavigationViewModel 
+        : ObservableObject
+        , INavigation
     {
         private ContentUIModel? _SelectedItem;
         private MediaListWindow? _listWindow;
@@ -40,7 +42,7 @@ namespace AvpMediaPlayer.UI.ViewModels
             _filter = filter;
             _mediaManagement = new AudioMediaManagement();
             _visualizer = new AudioVisualizer();
-            _mediaPlayer = new AudioPlayer(_mediaManagement, _visualizer);
+            _mediaPlayer = new AudioPlayer(_mediaManagement, _visualizer, this);
         }
         public string? SelectedText 
         { 
@@ -95,15 +97,21 @@ namespace AvpMediaPlayer.UI.ViewModels
         }
         private void ProcessNavigationCommand(RibbonModel model)
         {
-            if (SelectedItem is null 
+            var ni = model.Action == RibbonModel.Next ? 1 : - 1;
+            ((INavigation)this).NavigateNextItem(ni);
+        }
+        void INavigation.NavigateNextItem(int newIndex)
+        {
+            if (SelectedItem is null
                 || MediaList.Items is null) return;
 
-            int index = MediaList.Items.IndexOf(SelectedItem);
-            var ni = model.Action == RibbonModel.Next ? index + 1 : index - 1;
-            if (ni < 0) ni = MediaList.Items.Count - 1;
-            if (ni >= MediaList.Items.Count) ni = 0;
+            int index = MediaList.Items.IndexOf(SelectedItem) + newIndex;
+            if (index < 0) index = MediaList.Items.Count - 1;
+            if (index >= MediaList.Items.Count) index = 0;
 
-            MediaList.SelectedItem = MediaList.Items[ni];
+            SelectedItem = MediaList.SelectedItem = MediaList.Items[index];
+
+            _mediaPlayer.Play();
         }
         private async Task ProcessMediaList(RibbonModel model)
         {

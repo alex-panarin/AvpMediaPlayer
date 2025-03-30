@@ -12,6 +12,7 @@ namespace AvpMediaPlayer.Media.Audio
         private string[]? _SupportedFormats;
         private int _Stream = 0;
         private readonly SynchronizationContext? _syncContext;
+        private readonly INavigation _navigation;
 
         static AudioPlayer()
         {
@@ -33,14 +34,16 @@ namespace AvpMediaPlayer.Media.Audio
             .Where(op => RuntimeInformation.IsOSPlatform(op))
             .SelectMany(op =>
             {
-                var directory = AppDomain.CurrentDomain.BaseDirectory;
-                var dll = op.ToString() switch
+                var dll = new[]
                 {
-                    nameof(OSPlatform.Linux) => "libbass*.so",
-                    nameof(OSPlatform.OSX) => "libbass*.dylib",
-                    _ => "bass*.dll"
-                };
-
+                    (nameof (OSPlatform.Linux),  "libbass*.so"),
+                    (nameof(OSPlatform.OSX), "libbass*.dylib"),
+                    (nameof(OSPlatform.Windows), "bass*.dll")
+                }
+                .FirstOrDefault(lib => lib.Item1.Equals(op.ToString(), StringComparison.InvariantCultureIgnoreCase))
+                .Item2;
+                
+                var directory = AppDomain.CurrentDomain.BaseDirectory;
                 var excludes = new[]
                 {
                     Path.Combine(directory, dll.Replace("*", "")),
@@ -64,12 +67,13 @@ namespace AvpMediaPlayer.Media.Audio
             .Union(_plugins!
             .Select(p => string.Join("; ", $"{p.Value.Formats[0].FileExtensions}")))
             .ToArray();
-        public AudioPlayer(IMediaManagement mediaManagement, IVisualizer visualizer) 
+        public AudioPlayer(IMediaManagement mediaManagement, IVisualizer visualizer, INavigation navigation) 
             : base()
         {
             _syncContext = SynchronizationContext.Current;
             MediaManagement = mediaManagement;
             Visualizer = visualizer;
+            _navigation = navigation;
         }
 
         protected int Stream
@@ -85,11 +89,17 @@ namespace AvpMediaPlayer.Media.Audio
                 {
                     try
                     {
-                        if (!Bass.ChannelHasFlag(_Stream, BassFlags.Loop))
+                        if (MediaManagement?.LoopTrack == false 
+                            && !Bass.ChannelHasFlag(_Stream, BassFlags.Loop))
                         {
                             StopTimer();
                             Visualizer?.ClearStream();
                             State = PlayerState.Stop;
+                            if (MediaManagement.LoopCatalog)
+                            {
+                                _Stream = 0;
+                                _navigation.NavigateNextItem(1);
+                            }
                         }
                     }
                     finally { }

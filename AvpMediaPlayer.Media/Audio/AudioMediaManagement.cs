@@ -11,7 +11,6 @@ namespace AvpMediaPlayer.Media.Audio
     {
         private double _Volume = 0.5d;
         private bool _LoopTrack = false;
-        private bool _LoopCatalog = false;
         public AudioMediaManagement()
         {
             
@@ -42,11 +41,8 @@ namespace AvpMediaPlayer.Media.Audio
                 _LoopTrack = value;
             }
         }
-        public bool LoopCatalog
-        {
-            get => _LoopCatalog;
-            set => _LoopCatalog = value;
-        }
+        public bool LoopCatalog { get; set; } = true;
+        public bool LoopLists { get; set; } = true;
         public double Duration
         {
             get => Stream == 0 ? 0d : Bass.ChannelBytes2Seconds(Stream, Bass.ChannelGetLength(Stream));
