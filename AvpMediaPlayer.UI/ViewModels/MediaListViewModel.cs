@@ -39,6 +39,7 @@ namespace AvpMediaPlayer.UI.ViewModels
                 _onSelectedChanged?.Invoke(value);
             }
         }
+
         public MediaListModel? SelectedList
         {
             get => _SelectedList;
@@ -50,19 +51,25 @@ namespace AvpMediaPlayer.UI.ViewModels
                 Items.AddRange(value is null ? [] : value.Contents);
             }
         }
+
         public LockedObservableCollection<ContentUIModel>? Items { get; } = [];
+
         public LockedObservableCollection<MediaListModel>? Lists { get; private set; } = [];
+
         public RelayCommand PaneOpen { get; private set; }
+
         public bool IsPaneOpen
         {
             get => _IsPaneOpen;
             set => SetProperty(ref _IsPaneOpen, value);
         }
+
         public bool IsWaitLoad
         {
             get => _IsWaitLoad;
             set => SetProperty(ref _IsWaitLoad, value);
         }
+
         internal void AddMediaList(IReadOnlyList<IStorageItem> items)
         {
             IsWaitLoad = true;
@@ -92,6 +99,7 @@ namespace AvpMediaPlayer.UI.ViewModels
                 }
             });
         }
+
         internal void LoadMediaLists()
         {
             IsWaitLoad = true;
@@ -123,6 +131,7 @@ namespace AvpMediaPlayer.UI.ViewModels
                 }
             });
         }
+
         internal void OnListCommand(MediaListModel list, string? cmd)
         {
             if(cmd == RenameBeginCmd)

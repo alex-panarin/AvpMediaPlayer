@@ -24,6 +24,7 @@ namespace AvpMediaPlayer.UI.ViewModels
             RibbonModel.NewList,
             RibbonModel.Sets
         };
+
         private readonly IEnumerable<RibbonModel> _changableButtons;
 
         public RibbonViewModel()
@@ -31,6 +32,7 @@ namespace AvpMediaPlayer.UI.ViewModels
             Buttons = [];
             _changableButtons = [];
         }
+
         public RibbonViewModel(Action<RibbonModel?> buttonClick)
         {
             Buttons = [..RibbonModel.Buttons.Select(b =>
@@ -49,6 +51,7 @@ namespace AvpMediaPlayer.UI.ViewModels
 
             ChangeButtons();
         }
+
         public ContentUIModel? SelectedItem 
         { 
             get => _SelectedItem;
@@ -59,12 +62,15 @@ namespace AvpMediaPlayer.UI.ViewModels
                 ChangeButtons();
             }
         }
+
         public string? SelectedText 
         { 
             get => _SelectedText; 
             private set => SetProperty(ref _SelectedText, value); 
         }
+
         public ObservableCollection<RibbonModel> Buttons { get; }
+
         private void ChangeButtons()
         {
             var visible = SelectedItem is not null
