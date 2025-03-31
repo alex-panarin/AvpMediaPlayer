@@ -2,12 +2,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-		xmlns:audio="using:AvpMediaPlayer.Media.Audio"
-		xmlns:controls="using:AvpMediaPlayer.UI.Controls"
-        mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="84"
-        x:Class="AvpMediaPlayer.UI.Views.VisualizationWindow"
-        Title="VisualizationWindow"
-		x:DataType="audio:AudioVisualizer"
+		xmlns:vm="using:AvpMediaPlayer.UI.ViewModels"
+        mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="480"
+        x:Class="AvpMediaPlayer.UI.Views.SettingsWindow"
+		x:DataType="vm:SettingsViewModel"
 		Background="Transparent"
 		BorderThickness="0"
 		BorderBrush="Transparent"
@@ -16,20 +14,22 @@
 		ExtendClientAreaTitleBarHeightHint="-1"
 		ExtendClientAreaChromeHints="NoChrome"
 		WindowState="Normal"
-		Width="300"
-		Height="84"
+		Width="200"
+		Height="480"
 		CanResize="False"
-		Topmost="True">
+		Topmost="True"
+        Title="SettingsWindow">
+	
 	<Design.DataContext>
-		<audio:AudioVisualizer/>
+		<vm:SettingsViewModel/>
 	</Design.DataContext>
 	
 	<Panel>
-		<Border 
-				BorderBrush="Coral"
-				BorderThickness="2,2,2,2"
-				CornerRadius="6,6,6,6"
-				Opacity="1">
+		<Border
+			BorderBrush="Coral"
+			BorderThickness="2"
+			CornerRadius="6"
+			Opacity="1">
 			<Border.Background>
 				<LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
 					<GradientStops>
@@ -38,10 +38,20 @@
 					</GradientStops>
 				</LinearGradientBrush>
 			</Border.Background>
-			<controls:SpectrumControl Spectrum="{Binding Spectrums[0]}"
-									  Levels="{Binding Levels}"
-			  					      VerticalAlignment="Bottom"
-								      HorizontalAlignment="Center"/>
-			</Border>
+			<StackPanel Margin="2"
+						Spacing="4">
+				<TextBlock Text="Настойки"
+						   HorizontalAlignment="Center"/>
+				<Line Stroke="Coral"
+					  StartPoint="2,0"
+					  EndPoint="192, 0"/>
+				<CheckBox Content="LoopTrack"
+						  IsChecked="{Binding Settings.LoopTrack}"/>
+				<CheckBox Content="LoopCatalog"
+						  IsChecked="{Binding Settings.LoopCatalog}"/>
+				<CheckBox Content="LoopLists"
+						  IsChecked="{Binding Settings.LoopLists}"/>
+			</StackPanel>
+		</Border>
 	</Panel>
 </Window>

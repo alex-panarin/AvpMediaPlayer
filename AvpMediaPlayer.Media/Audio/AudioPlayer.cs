@@ -67,7 +67,10 @@ namespace AvpMediaPlayer.Media.Audio
             .Union(_plugins!
             .Select(p => string.Join("; ", $"{p.Value.Formats[0].FileExtensions}")))
             .ToArray();
-        public AudioPlayer(IMediaManagement mediaManagement, IVisualizer visualizer, INavigation navigation) 
+
+        public AudioPlayer(IMediaManagement mediaManagement
+            , IVisualizer visualizer
+            , INavigation navigation) 
             : base()
         {
             _syncContext = SynchronizationContext.Current;
@@ -113,6 +116,7 @@ namespace AvpMediaPlayer.Media.Audio
 
             Bass.ChannelPause(Stream);
         }
+
         protected override void OnPlay()
         {
             if (State == PlayerState.Play) return;
@@ -137,6 +141,7 @@ namespace AvpMediaPlayer.Media.Audio
                     throw new OperationCanceledException($"Error Play: {Bass.LastError}");
             }
         }
+
         protected override void OnStop()
         {
             if (Stream == 0 || State == PlayerState.Stop) return;
@@ -145,6 +150,7 @@ namespace AvpMediaPlayer.Media.Audio
             Bass.StreamFree(Stream);
             _Stream = 0;
         }
+
         protected override void OnTimerCallback()
         {
             _syncContext?.Post((cb) =>
@@ -158,10 +164,12 @@ namespace AvpMediaPlayer.Media.Audio
                     Visualizer?.ClearStream();
             }, null);
         }
+
         protected override void UnmanagedDispose()
         {
             Bass.Free();
         }
+
         private SyncProcedure GetSyncProcedure(Action callBack)
         {
             return (SyncHandle, Channel, Data, User) =>

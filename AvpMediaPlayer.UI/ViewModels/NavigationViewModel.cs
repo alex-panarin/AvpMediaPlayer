@@ -5,6 +5,7 @@ using Avalonia.Controls.Selection;
 using Avalonia.Platform.Storage;
 using AvpMediaPlayer.Core;
 using AvpMediaPlayer.Core.Helpers;
+using AvpMediaPlayer.Core.Interfaces;
 using AvpMediaPlayer.Core.Models;
 using AvpMediaPlayer.Media.Audio;
 using AvpMediaPlayer.Media.Interfaces;
@@ -25,12 +26,16 @@ namespace AvpMediaPlayer.UI.ViewModels
         private MediaListWindow? _listWindow;
         private VisualizationWindow? _visualWindow;
         private IMediaPlayer _mediaPlayer;
+        private readonly SettingsViewModel _settings;
         private IMediaManagement _mediaManagement;
         private IVisualizer _visualizer;
         private string? _SelectedText;
+        private SettingsWindow? _settingsWindow;
         private readonly FilePickerFileType _filter;
         const string _NewListName = "Новый список";
-        public NavigationViewModel(FilePickerFileType filter)
+
+        public NavigationViewModel(FilePickerFileType filter
+            , ISettingsProvider settingsProvider)
         {
             var patterns = filter.Patterns?.Select(p => p.Replace("*",""));
             Ribbon = new(async (m) => await OnButtonClick(m));
@@ -43,14 +48,26 @@ namespace AvpMediaPlayer.UI.ViewModels
             _mediaManagement = new AudioMediaManagement();
             _visualizer = new AudioVisualizer();
             _mediaPlayer = new AudioPlayer(_mediaManagement, _visualizer, this);
+            _settings = new SettingsViewModel(settingsProvider);
+
+            if (_settings.Settings is not null)
+            {
+                _mediaManagement.LoopTrack = _settings.Settings.LoopTrack;
+                _mediaManagement.LoopCatalog = _settings.Settings.LoopCatalog;
+                _mediaManagement.LoopLists = _settings.Settings.LoopLists;
+            }
         }
+
         public string? SelectedText 
         { 
             get => _SelectedText; 
             set => SetProperty(ref _SelectedText, value); 
         }
+
         public RibbonViewModel Ribbon { get; }
+
         public MediaListViewModel MediaList { get; }
+
         public ContentUIModel? SelectedItem 
         { 
             get => _SelectedItem;
@@ -63,16 +80,25 @@ namespace AvpMediaPlayer.UI.ViewModels
                     _mediaPlayer.MediaContent = _SelectedItem.MediaContent;
             } 
         }
+
         public RelayCommand? CloseApp { get; set; }
+
         private async Task OnButtonClick(RibbonModel? model)
         {
             _listWindow ??= new MediaListWindow() { DataContext = MediaList };
             _visualWindow ??= new VisualizationWindow() { DataContext = _visualizer };
+            _settingsWindow ??= new SettingsWindow() { DataContext = _settings };
 
             switch (model?.Action)
             {
                 case RibbonModel.List:
                     _listWindow.IsVisible = !_listWindow.IsVisible;
+                    break;
+                case RibbonModel.Sets:
+                    _settingsWindow.IsVisible = !_settingsWindow.IsVisible;
+                    break;
+                case RibbonModel.Show:
+                    _visualWindow.IsVisible = !_visualWindow.IsVisible;
                     break;
                 case RibbonModel.Stop:
                 case RibbonModel.Play:
@@ -83,9 +109,6 @@ namespace AvpMediaPlayer.UI.ViewModels
                 case RibbonModel.Prev:
                     ProcessNavigationCommand(model);
                     break;
-                case RibbonModel.Show:
-                    _visualWindow.IsVisible = !_visualWindow.IsVisible;
-                    break;
                 case RibbonModel.AddTrack:
                 case RibbonModel.AddList:
                 case RibbonModel.NewList:
@@ -95,11 +118,13 @@ namespace AvpMediaPlayer.UI.ViewModels
                     break;
             }
         }
+
         private void ProcessNavigationCommand(RibbonModel model)
         {
             var ni = model.Action == RibbonModel.Next ? 1 : - 1;
             ((INavigation)this).NavigateNextItem(ni);
         }
+
         void INavigation.NavigateNextItem(int offset)
         {
             if (SelectedItem is null
@@ -113,6 +138,7 @@ namespace AvpMediaPlayer.UI.ViewModels
 
             _mediaPlayer.Play();
         }
+
         private async Task ProcessMediaList(RibbonModel model)
         {
             var topLevel = TopLevel.GetTopLevel(_listWindow);
@@ -122,6 +148,7 @@ namespace AvpMediaPlayer.UI.ViewModels
             
             var startLocation = await provider.TryGetFolderFromPathAsync(@"E:\Music"); // TODO: from Settings
             IReadOnlyList<IStorageItem>? items = null;
+
             if (model.Action == RibbonModel.AddList)
             {
                 items = await provider.OpenFolderPickerAsync(new FolderPickerOpenOptions
@@ -157,10 +184,12 @@ namespace AvpMediaPlayer.UI.ViewModels
 
                 MediaList.SelectedList = list;
             }
+            
             if (items!.IsEmpty() == true) return;
 
             MediaList.AddMediaList(items!);
         }
+
         private async Task ProcessMediaCommand(RibbonModel model)
         {
             switch(model.Action)
@@ -177,6 +206,7 @@ namespace AvpMediaPlayer.UI.ViewModels
             }
             await Task.CompletedTask;
         }
+
         private void OnSelectedChanged(ContentUIModel? item)
             => SelectedItem = item;
     }

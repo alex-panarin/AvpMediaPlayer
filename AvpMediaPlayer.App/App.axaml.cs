@@ -6,6 +6,7 @@ using System.Linq;
 using Avalonia.Markup.Xaml;
 using AvpMediaPlayer.App.ViewModels;
 using AvpMediaPlayer.App.Views;
+using AvpMediaPlayer.Core;
 
 namespace AvpMediaPlayer.App;
 
@@ -23,9 +24,10 @@ public partial class App : Application
             // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
             // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
             DisableAvaloniaDataAnnotationValidation();
+            const string settingFileName = "avpsettings.json";
             desktop.MainWindow = new MainWindow
             {
-                DataContext = new MainWindowViewModel(),
+                DataContext = new MainWindowViewModel(new SettingsProvider(settingFileName))
             };
         }
 

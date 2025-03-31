@@ -1,6 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
+using AvpMediaPlayer.Core.Interfaces;
 using AvpMediaPlayer.UI.ViewModels;
 
 namespace AvpMediaPlayer.App.ViewModels
@@ -12,9 +13,9 @@ namespace AvpMediaPlayer.App.ViewModels
             Patterns = //["*.mp3", "*.ogg", "*.flac", "*.wav", "*.jpg", "*.jpeg", "*.bmp", "*.tiff", "*.png"] 
                 ["*.mp3", "*.ogg", "*.flac", "*.wav", "*.wma"]
         };
-        public MainWindowViewModel()
+        public MainWindowViewModel(ISettingsProvider settingsProvider)
         {
-            Navigation = new(_filter)
+            Navigation = new(_filter, settingsProvider)
             {
                 CloseApp = new(() =>
                 {

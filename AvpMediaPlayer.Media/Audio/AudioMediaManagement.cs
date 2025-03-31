@@ -13,7 +13,6 @@ namespace AvpMediaPlayer.Media.Audio
         private bool _LoopTrack = false;
         public AudioMediaManagement()
         {
-            
         }
 
         public double Volume
@@ -28,6 +27,7 @@ namespace AvpMediaPlayer.Media.Audio
                 _Volume = value;
             }
         }
+
         public bool LoopTrack
         {
             get => _LoopTrack;
@@ -41,31 +41,39 @@ namespace AvpMediaPlayer.Media.Audio
                 _LoopTrack = value;
             }
         }
+
         public bool LoopCatalog { get; set; } = true;
+
         public bool LoopLists { get; set; } = true;
+
         public double Duration
         {
             get => Stream == 0 ? 0d : Bass.ChannelBytes2Seconds(Stream, Bass.ChannelGetLength(Stream));
         }
+
         public double Position
         {
             get => Stream == 0 ? 0d : Bass.ChannelBytes2Seconds(Stream, Bass.ChannelGetPosition(Stream));
             set => Bass.ChannelSetPosition(Stream, Bass.ChannelSeconds2Bytes(Stream, value));
         }
+
         private int Stream { get;  set; }
 
         public void CallDurationChange()
         {
             OnPropertyChanged(nameof(Duration));
         }
+
         public void CallPositionChange()
         {
             OnPropertyChanged(nameof(Position));
         }
+
         public void SetStream(int stream)
         {
             Stream = stream;    
         }
+
         private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new(propertyName));
