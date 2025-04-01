@@ -13,6 +13,7 @@ namespace AvpMediaPlayer.App.ViewModels
             Patterns = //["*.mp3", "*.ogg", "*.flac", "*.wav", "*.jpg", "*.jpeg", "*.bmp", "*.tiff", "*.png"] 
                 ["*.mp3", "*.ogg", "*.flac", "*.wav", "*.wma"]
         };
+        public MainWindowViewModel() { }
         public MainWindowViewModel(ISettingsProvider settingsProvider)
         {
             Navigation = new(_filter, settingsProvider)
@@ -25,6 +26,6 @@ namespace AvpMediaPlayer.App.ViewModels
             };
         }
 
-        public NavigationViewModel Navigation { get; }
+        public NavigationViewModel? Navigation { get; }
     }
 }

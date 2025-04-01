@@ -123,23 +123,21 @@ namespace AvpMediaPlayer.Media.Audio
 
             if (Stream == 0)
             {
-                Stream = Bass.CreateStream(MediaContent!.Content!.Url);
+                if(MediaContent!.Content!.Url is not null)
+                    Stream = Bass.CreateStream(MediaContent.Content.Url);
+
                 if (Stream == 0)
                     throw new OperationCanceledException($"Error Create: {Bass.LastError}");
-                
-                if (Visualizer is not null)
-                {
-                    MediaManagement?.CallDurationChange();
-                    MediaManagement?.SetStream(Stream);
-                    Visualizer.SetStream(Stream);
-                }
             }
 
-            if (Stream != 0)
-            {
-                if(!Bass.ChannelPlay(Stream))
-                    throw new OperationCanceledException($"Error Play: {Bass.LastError}");
-            }
+            if (Visualizer is not null)
+                Visualizer.SetStream(Stream);
+
+            if (MediaManagement is not null)
+                MediaManagement.SetStream(Stream);
+
+            if (!Bass.ChannelPlay(Stream))
+                throw new OperationCanceledException($"Error Play: {Bass.LastError}");
         }
 
         protected override void OnStop()
@@ -148,7 +146,7 @@ namespace AvpMediaPlayer.Media.Audio
             
             Bass.ChannelStop(Stream);
             Bass.StreamFree(Stream);
-            _Stream = 0;
+            InternalStop();
         }
 
         protected override void OnTimerCallback()
@@ -161,7 +159,7 @@ namespace AvpMediaPlayer.Media.Audio
                     Visualizer?.Visualize();
                 }
                 if (State == PlayerState.Stop)
-                    Visualizer?.ClearStream();
+                    InternalStop();
             }, null);
         }
 
@@ -182,6 +180,13 @@ namespace AvpMediaPlayer.Media.Audio
                 else 
                     _syncContext.Post(cb => callBack(), null);
             };
+        }
+
+        private void InternalStop()
+        {
+            _Stream = 0;
+            Visualizer?.ClearStream();
+            MediaManagement?.SetStream(_Stream);
         }
     }
 }

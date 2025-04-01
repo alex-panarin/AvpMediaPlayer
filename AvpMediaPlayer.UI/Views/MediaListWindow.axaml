@@ -234,22 +234,22 @@
 											Height="30">
 										<Grid ColumnDefinitions="*, 40, 40, 100">
 											<TextBlock Grid.Column="0"
-														Classes="list"
-														Text="{Binding Title}"
-														TextWrapping="WrapWithOverflow"
-														MaxWidth="240"
-													    TextTrimming=" "/>
+													   Classes="list"
+													   Text="{Binding Title}"
+													   TextWrapping="NoWrap"
+													   MaxWidth="300"
+													   TextAlignment="Start"/>
 											<PathIcon Grid.Column="1"
-														Data="{StaticResource music_regular}"
-														Foreground="Coral"
-														Width="14"
-														Height="14"/>
+													  Data="{StaticResource music_regular}"
+													  Foreground="Coral"
+													  Width="14"
+													  Height="14"/>
 											<TextBlock Grid.Column="2"
-														Classes="list"
-														Text="{Binding Type}"/>
+													   Classes="list"
+													   Text="{Binding Type}"/>
 											<TextBlock Grid.Column="3"
-														Classes="list"
-														Text="{Binding Duration}"/>
+													   Classes="list"
+													   Text="{Binding Duration}"/>
 										</Grid>
 									</Border>
 								</DataTemplate>

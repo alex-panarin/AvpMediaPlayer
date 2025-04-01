@@ -9,7 +9,7 @@ namespace AvpMediaPlayer.Media.Audio
         : IMediaManagement
         , INotifyPropertyChanged
     {
-        private double _Volume = 0.5d;
+        private double _Volume = 0.01d;
         private bool _LoopTrack = false;
         public AudioMediaManagement()
         {
@@ -20,11 +20,10 @@ namespace AvpMediaPlayer.Media.Audio
             get => _Volume;
             set
             {
-                if (Stream == 0
-                    || !Bass.ChannelSetAttribute(Stream, ChannelAttribute.Volume, value))
-                    return;
-
-                _Volume = value;
+                if (Stream == 0) return;
+                //var volume = Bass.ChannelGetAttribute(Stream, ChannelAttribute.Volume);
+                if (Bass.ChannelSetAttribute(Stream, ChannelAttribute.Volume, value))
+                    _Volume = value;
             }
         }
 
@@ -71,7 +70,9 @@ namespace AvpMediaPlayer.Media.Audio
 
         public void SetStream(int stream)
         {
-            Stream = stream;    
+            Stream = stream;
+            Volume = _Volume;
+            CallDurationChange();
         }
 
         private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
