@@ -12,13 +12,17 @@ namespace AvpMediaPlayer.UI.Models
         public MediaListModel()
         {
         }
+
         public string? Title
         {
             get => _Title;
             set => SetProperty(ref _Title, value);
         }
+
         public LockedObservableCollection<ContentUIModel> Contents { get; internal set; } = [];
+
         public RelayCommand<string>? ListCommand { get; set; }
+
         public bool IsNeedRename
         {
             get => _IsNeedRename;

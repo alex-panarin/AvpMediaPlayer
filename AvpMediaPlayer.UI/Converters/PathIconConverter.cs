@@ -9,6 +9,7 @@ namespace AvpMediaPlayer.UI.Converters
     public class PathIconConverter : IValueConverter
     {
         private static Dictionary<string, StreamGeometry> _cache = [];
+        
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             var key = $"{value}";

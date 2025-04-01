@@ -1,7 +1,6 @@
 ﻿using AvpMediaPlayer.Core.Interfaces;
 using AvpMediaPlayer.Core.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
-using System.Runtime;
 
 namespace AvpMediaPlayer.UI.ViewModels
 {
@@ -10,8 +9,8 @@ namespace AvpMediaPlayer.UI.ViewModels
         private readonly ISettingsProvider? _settingsProvider;
         private SettingsModel? _Settings;
 
-        public SettingsViewModel()
-        { }
+        public SettingsViewModel(){ }
+
         public SettingsViewModel(ISettingsProvider settingsProvider)
         {
             _settingsProvider = settingsProvider;

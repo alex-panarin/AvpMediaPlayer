@@ -11,6 +11,7 @@ public partial class SpectrumControl : UserControl
 {
     public readonly static DirectProperty<SpectrumControl, double[]?> SpectrumProperty =
         AvaloniaProperty.RegisterDirect<SpectrumControl, double[]?>(nameof(Spectrum), (c) => c.Spectrum, (c, v) => c.Spectrum = v);
+    
     public readonly static DirectProperty<SpectrumControl, double[]?> LevelsProperty =
         AvaloniaProperty.RegisterDirect<SpectrumControl, double[]?>(nameof(Levels), (c) => c.Levels, (c, v) => c.Levels = v);
 
@@ -53,14 +54,16 @@ public partial class SpectrumControl : UserControl
     {
         base.OnDataContextEndUpdate();
     }
+
     public override void Render(DrawingContext context)
     {
         base.Render(context);
         DrawLinearStyle(context, container.Bounds, Spectrum);
     }
+
     private void DrawLinearStyle(DrawingContext context, Rect clipRect, double[]? data)
     {
-        if(data == null) return;
+        if(data is null) return;
 
         var pointWidth = clipRect.Width / data.Length;
         var height = clipRect.Height;

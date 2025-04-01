@@ -28,15 +28,19 @@ namespace AvpMediaPlayer.UI.Models
         {
             
         }
+
         public LockedObservableCollection(IEnumerable<TEntity> entities)
         {
             AddRange(entities);
         }
+
         private bool LockRaiseEvent { get; set; } = false;
+
         private void RaiseCollectionChanged()
         {
             this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
+
         public void AddRange(IEnumerable<TEntity> collection)
         {
             if (collection == null) return;
@@ -49,16 +53,19 @@ namespace AvpMediaPlayer.UI.Models
                 }
             }
         }
+
         protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
         {
             if (LockRaiseEvent) return;
             base.OnCollectionChanged(e);
         }
+
         protected override void OnPropertyChanged(PropertyChangedEventArgs e)
         {
             if (LockRaiseEvent) return;
             base.OnPropertyChanged(e);
         }
+
         public IDisposable LockChangedEvent()
         {
             return new Locker(this);
