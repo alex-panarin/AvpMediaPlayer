@@ -13,11 +13,13 @@ namespace AvpMediaPlayer.Core
         {
             this._provider = provider ?? throw new ArgumentNullException(nameof(provider));
         }
+
         public IEnumerable<Content> Get(Content parent)
         {
             LoadContents(parent);
             return parent.Contents;
         }
+
         public Content Get(string path)
         {
             var content = _storage.GetOrAdd(path, _provider.GetContent(path));
@@ -25,6 +27,7 @@ namespace AvpMediaPlayer.Core
 
             return content;
         }
+
         private void LoadContents(Content parent)
         {
             foreach (var content in _provider.GetContents(parent.Url))

@@ -12,6 +12,7 @@ namespace AvpMediaPlayer.Core
                 ? new DirectoryContent(url)
                 : new FileContent(url);
         }
+
         public IEnumerable<Content> GetContents(string url)
         {
             var flags = new[]

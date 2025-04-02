@@ -14,6 +14,7 @@ namespace AvpMediaPlayer.App.ViewModels
                 ["*.mp3", "*.ogg", "*.flac", "*.wav", "*.wma"]
         };
         public MainWindowViewModel() { }
+
         public MainWindowViewModel(ISettingsProvider settingsProvider)
         {
             Navigation = new(_filter, settingsProvider)

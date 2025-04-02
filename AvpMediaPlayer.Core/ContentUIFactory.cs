@@ -16,17 +16,20 @@ namespace AvpMediaPlayer.Core
             this._contentFactory = contextFactory;
             Filter = filter ?? new(c => c != null);
         }
+
         public IEnumerable<ContentUIModel> Get(IEnumerable<string> paths)
         {
             var contents = paths.Select(path => _contentRepository.Get(path))
                 .SelectMany(c => Get(c));
             return contents;
         }
+
         public IEnumerable<ContentUIModel> Get(Content content)
         {
             foreach (var val in Load(content))
                 yield return val;
         }
+
         private IEnumerable<ContentUIModel> Load(Content content)
         {
             if (content.IsDirectory)

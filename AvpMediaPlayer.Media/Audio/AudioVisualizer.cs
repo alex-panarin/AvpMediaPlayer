@@ -83,8 +83,8 @@ namespace AvpMediaPlayer.Media.Audio
 
         public double[] Levels => 
         [
-            _stream != 0 && LeftLevel != 0 ? LeftLevel : 0.1d ,
-            _stream != 0 && RightLevel != 0 ? RightLevel : 0.1d
+            LeftLevel != 0 ? LeftLevel : 0.1d ,
+            RightLevel != 0 ? RightLevel : 0.1d
         ];
 
         public int Points => _points;

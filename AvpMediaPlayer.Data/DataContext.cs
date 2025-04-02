@@ -11,6 +11,7 @@ namespace AvpMediaPlayer.Data
         {
             _connectionString = connectionString;
         }
+
         public void Rename(string listName, string newName)
         {
             using var db = new LiteDatabase(_connectionString);
@@ -25,6 +26,7 @@ namespace AvpMediaPlayer.Data
             list.Name = newName;
             lists.Update(list);
         }
+
         public MediaList Add(string listName, string[] media)
         {
             using var db = new LiteDatabase(_connectionString);
@@ -54,6 +56,7 @@ namespace AvpMediaPlayer.Data
             }
             return list;
         }
+
         public MediaList? Get(string listName)
         {
             using var db = new LiteDatabase(_connectionString);
@@ -64,12 +67,14 @@ namespace AvpMediaPlayer.Data
                 .Where(x => x.Name == listName)
                 .FirstOrDefault();
         }
+
         public MediaList[] Get()
         {
             using var db = new LiteDatabase(_connectionString);
             var lists = db.GetCollection<MediaList>(dbname);
             return lists.Query().ToArray();
         }
+
         public void Delete(string listName)
         {
             using var db = new LiteDatabase(_connectionString);
@@ -84,6 +89,7 @@ namespace AvpMediaPlayer.Data
 
             lists.Delete(list.Id);
         }
+
         public void Remove(string listName, string[] media)
         {
             using var db = new LiteDatabase(_connectionString);

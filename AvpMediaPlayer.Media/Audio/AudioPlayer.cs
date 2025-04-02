@@ -107,7 +107,9 @@ namespace AvpMediaPlayer.Media.Audio
                 }));
             } 
         } 
+
         public static bool IsInitialized { get; private set; }
+
         protected override void OnPause()
         {
             if (Stream == 0 || State == PlayerState.Pause) return;
