@@ -219,7 +219,8 @@
 								 SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
 								 Background="Transparent"
 								 ScrollViewer.VerticalScrollBarVisibility="Auto"
-								 ScrollViewer.HorizontalScrollBarVisibility="Auto">
+								 ScrollViewer.HorizontalScrollBarVisibility="Auto"
+								 DoubleTapped="ListBox_DoubleTapped">
 							<ListBox.ItemsPanel>
 								<ItemsPanelTemplate>
 									<VirtualizingStackPanel/>

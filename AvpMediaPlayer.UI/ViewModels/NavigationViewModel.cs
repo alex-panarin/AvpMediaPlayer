@@ -56,6 +56,15 @@ namespace AvpMediaPlayer.UI.ViewModels
                 _mediaManagement.LoopCatalog = _settings.Settings.LoopCatalog;
                 _mediaManagement.LoopLists = _settings.Settings.LoopLists;
             }
+
+            MediaList.DoubleClick = () =>
+            {
+                if (_SelectedItem is not null)
+                {
+                    _mediaPlayer.MediaContent = _SelectedItem.MediaContent;
+                    _mediaPlayer.Play();
+                }
+            };
         }
 
         public string? SelectedText 

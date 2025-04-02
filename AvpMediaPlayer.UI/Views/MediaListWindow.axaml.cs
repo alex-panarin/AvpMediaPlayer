@@ -47,4 +47,10 @@ public partial class MediaListWindow : Window
             this.Position = _mainWindow.PointToScreen(_mainWindow.Bounds.BottomLeft);
         }
     }
+
+    private void ListBox_DoubleTapped(object? sender, Avalonia.Input.TappedEventArgs e)
+    {
+        if (this.DataContext is MediaListViewModel mlv)
+            mlv.OnDoubleClick();
+    }
 }

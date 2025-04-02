@@ -30,6 +30,8 @@ namespace AvpMediaPlayer.UI.ViewModels
             PaneOpen = new(() => IsPaneOpen = !IsPaneOpen);
         }
 
+        public Action DoubleClick { get; set; }
+
         public ContentUIModel? SelectedItem
         { 
             get => _SelectedItem;
@@ -152,6 +154,12 @@ namespace AvpMediaPlayer.UI.ViewModels
                 _OldTitle = null;
             }
         }
+
         private string? _OldTitle = null;
+
+        internal void OnDoubleClick()
+        {
+            DoubleClick?.Invoke();
+        }
     }
 }
