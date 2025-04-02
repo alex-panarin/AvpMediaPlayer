@@ -96,13 +96,11 @@ namespace AvpMediaPlayer.Media.Audio
                             && !Bass.ChannelHasFlag(_Stream, BassFlags.Loop))
                         {
                             StopTimer();
-                            Visualizer?.ClearStream();
                             State = PlayerState.Stop;
+                            InternalStop();
+
                             if (MediaManagement.LoopCatalog)
-                            {
-                                _Stream = 0;
                                 _navigation.NavigateNextItem(1);
-                            }
                         }
                     }
                     finally { }
@@ -185,7 +183,7 @@ namespace AvpMediaPlayer.Media.Audio
         private void InternalStop()
         {
             _Stream = 0;
-            Visualizer?.ClearStream();
+            Visualizer?.SetStream(_Stream);
             MediaManagement?.SetStream(_Stream);
         }
     }

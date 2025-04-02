@@ -10,7 +10,6 @@
     public interface IVisualizer
     {
         void Visualize();
-        void ClearStream();
         void SetStream(int stream);
     }
 }

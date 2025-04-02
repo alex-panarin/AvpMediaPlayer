@@ -24,6 +24,7 @@ namespace AvpMediaPlayer.Media.Audio
             :this(78, 512, false)
         {
         }
+
         public AudioVisualizer(double scale, int pounts = 0, bool stereo = true)
         {
             _signalProvider = new SignalProvider(DataFlags.FFT1024, true, stereo) { WindowType = WindowType.Hanning };
@@ -31,16 +32,16 @@ namespace AvpMediaPlayer.Media.Audio
             _scale = scale;
         }
 
-        public void ClearStream()
-        {
-            _stream = 0;
-            Visualize();
-        }
         public void SetStream(int stream)
         {
             _stream = stream; 
-            _signalProvider?.SetChannel(stream);
+
+            if(_stream == 0)
+                Visualize();
+            else
+                _signalProvider?.SetChannel(stream);
         }
+
         public void Visualize()
         {
             OnPropertyChanged(nameof(Levels));
@@ -57,6 +58,7 @@ namespace AvpMediaPlayer.Media.Audio
             }
 
         }
+
         protected double RightLevel
         {
             get
@@ -71,18 +73,20 @@ namespace AvpMediaPlayer.Media.Audio
             get
             {
                 return _stream == 0
-                    ? [[..Enumerable.Range(0, _points).Select(p => 10d)], [..Enumerable.Range(0, _points).Select( p => 10d)]]
+                    ? [[..Enumerable.Range(0, _points).Select(p => 5d)], [..Enumerable.Range(0, _points).Select( p => 5d)]]
                     : [.. _signalProvider!.DataSampleWindowed
                         .Select(channelData => 
                             channelData.DivideToParts(_points == 0 ? defaultPoints : _points)
                             .AdjustToScale(1, _scale, true, out _).Data)];
             }
         }
+
         public double[] Levels => 
-            [
-                _stream != 0 && LeftLevel != 0 ? LeftLevel : 0.1d ,
-                _stream != 0 && RightLevel != 0 ? RightLevel : 0.1d
-            ];
+        [
+            _stream != 0 && LeftLevel != 0 ? LeftLevel : 0.1d ,
+            _stream != 0 && RightLevel != 0 ? RightLevel : 0.1d
+        ];
+
         public int Points => _points;
         public double Height => _scale;
 
