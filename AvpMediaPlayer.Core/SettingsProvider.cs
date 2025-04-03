@@ -1,7 +1,8 @@
 ﻿using AvpMediaPlayer.Core.Interfaces;
 using AvpMediaPlayer.Core.Models;
+using System.IO;
+using System.Text;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace AvpMediaPlayer.Core
 {
@@ -9,24 +10,44 @@ namespace AvpMediaPlayer.Core
     {
         private readonly JsonSerializerOptions _options
             = new() { PropertyNameCaseInsensitive = true } ;
-        private readonly FileStream _fileStream;
+        private readonly string _path;
 
         public SettingsProvider(string fileName)
         {
-            var path = Path.Combine(AppContext.BaseDirectory, fileName);
-            _fileStream = File.Open(path, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+            _path = Path.Combine(AppContext.BaseDirectory, fileName);
         }
 
         public SettingsModel? Get()
         {
+            using var fileStream = File.Open(_path, FileMode.OpenOrCreate, FileAccess.ReadWrite);
             try
             {
-                return JsonSerializer.Deserialize<SettingsModel>(_fileStream, _options);
+                return JsonSerializer.Deserialize<SettingsModel>(fileStream, _options);
             }
             catch 
             { 
-                return new SettingsModel(); 
+                var model = new SettingsModel(); 
+                SaveInternal(model, fileStream);
+
+                return model;   
             }
+        }
+
+        private void SaveInternal(SettingsModel model, FileStream fileStream)
+        {
+            try
+            {
+                var content = JsonSerializer.Serialize(model, _options);
+                var bytes = Encoding.UTF8.GetBytes(content);
+                fileStream.Write(bytes, 0, bytes.Length);
+            }
+            catch { }
+        }
+
+        public void Save(SettingsModel model)
+        {
+            using var fileStream = File.Open(_path, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+            SaveInternal(model, fileStream);
         }
     }
 }

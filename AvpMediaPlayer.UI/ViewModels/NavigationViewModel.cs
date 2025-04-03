@@ -92,6 +92,8 @@ namespace AvpMediaPlayer.UI.ViewModels
 
         public RelayCommand? CloseApp { get; set; }
 
+        public IMediaManagement MediaManagement => _mediaManagement;
+
         private async Task OnButtonClick(RibbonModel? model)
         {
             _listWindow ??= new MediaListWindow() { DataContext = MediaList };

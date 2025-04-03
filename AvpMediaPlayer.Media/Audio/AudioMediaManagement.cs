@@ -11,6 +11,10 @@ namespace AvpMediaPlayer.Media.Audio
     {
         private double _Volume = 0.01d;
         private bool _LoopTrack = false;
+        private string? _durationText;
+        private string? _positionText;
+        private object _locker = new object();
+
         public AudioMediaManagement()
         {
         }
@@ -24,8 +28,11 @@ namespace AvpMediaPlayer.Media.Audio
                 //var volume = Bass.ChannelGetAttribute(Stream, ChannelAttribute.Volume);
                 if (Bass.ChannelSetAttribute(Stream, ChannelAttribute.Volume, value))
                     _Volume = value;
+                OnPropertyChanged(nameof(VolumeText));
             }
         }
+
+        public string VolumeText => _Volume.ToString("F2");
 
         public bool LoopTrack
         {
@@ -47,16 +54,46 @@ namespace AvpMediaPlayer.Media.Audio
 
         public double Duration
         {
-            get => Stream == 0 ? 0d : Bass.ChannelBytes2Seconds(Stream, Bass.ChannelGetLength(Stream));
+            get
+            {
+                var duration = 0d;
+                if(Stream != 0)
+                    duration = Bass.ChannelBytes2Seconds(Stream, Bass.ChannelGetLength(Stream));
+                _durationText = string.Format("{0:F0}m:{1:F0}s", duration / 60, duration % 60);
+                return duration;
+            }
         }
 
         public double Position
         {
-            get => Stream == 0 ? 0d : Bass.ChannelBytes2Seconds(Stream, Bass.ChannelGetPosition(Stream));
-            set => Bass.ChannelSetPosition(Stream, Bass.ChannelSeconds2Bytes(Stream, value));
+            get
+            {
+                lock (_locker)
+                {
+                    var position = 0d;
+                    if (Stream != 0)
+                        position = Bass.ChannelBytes2Seconds(Stream, Bass.ChannelGetPosition(Stream));
+
+                    _positionText = string.Format("{0:F0}m:{1:F0}s", position /60, position % 60);
+                    return position;
+                }
+            }
+            set
+            {
+                if (Stream == 0) return;
+
+                lock (_locker)
+                {
+                    Bass.ChannelPause(Stream);
+                    Bass.ChannelSetPosition(Stream, Bass.ChannelSeconds2Bytes(Stream, value));
+                    Bass.ChannelPlay(Stream);
+                }
+            }
         }
 
         private int Stream { get;  set; }
+
+        public string Timings  => $"{_positionText} - {_durationText}";
 
         public void CallDurationChange()
         {
@@ -66,6 +103,7 @@ namespace AvpMediaPlayer.Media.Audio
         public void CallPositionChange()
         {
             OnPropertyChanged(nameof(Position));
+            OnPropertyChanged(nameof(Timings));
         }
 
         public void SetStream(int stream)

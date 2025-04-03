@@ -30,7 +30,7 @@ namespace AvpMediaPlayer.UI.ViewModels
             PaneOpen = new(() => IsPaneOpen = !IsPaneOpen);
         }
 
-        public Action DoubleClick { get; set; }
+        public Action? DoubleClick { get; set; }
 
         public ContentUIModel? SelectedItem
         { 

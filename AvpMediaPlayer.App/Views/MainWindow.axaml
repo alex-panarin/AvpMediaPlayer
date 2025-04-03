@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:controls="using:AvpMediaPlayer.UI.Controls"
+		xmlns:convert="using:AvpMediaPlayer.UI.Converters"
         mc:Ignorable="d" d:DesignWidth="640" d:DesignHeight="86"
         x:Class="AvpMediaPlayer.App.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
@@ -22,11 +23,50 @@
 		Height="84"
 		CanResize="False"
 		Topmost="True">
-
+	
+	<!--<Window.Resources>
+		<convert:DurationConverter x:Key="durationConverter"/>
+	</Window.Resources>-->
+	
     <Design.DataContext>
         <vm:MainWindowViewModel/>
     </Design.DataContext>
-
+	
+	<Window.Styles>
+		<Style Selector="Slider.duration:horizontal">
+			<Setter Property="MinWidth" Value="40" />
+			<Setter Property="MinHeight" Value="16" />
+			<Setter Property="Background" Value="Coral"/>
+			<Setter Property="Foreground" Value="Coral"/>
+		</Style>
+		<Style Selector="Slider.duration:horizontal /template/ Track > Thumb">
+			<Setter Property="Height" Value="14"/>
+			<Setter Property="Width" Value="14"/>
+			<Setter Property="BorderBrush" Value="Coral"/>
+			<Setter Property="BorderThickness" Value="2"/>
+			<Setter Property="Background" Value="Transparent"/>
+		</Style>
+		<Style Selector="Slider.duration:horizontal:pointerover /template/ RepeatButton#PART_DecreaseButton">
+			<Setter Property="Background" Value="Coral"/>
+		</Style>
+		<Style Selector="Slider.volume:vertical">
+			<Setter Property="MinWidth" Value="10" />
+			<Setter Property="MinHeight" Value="10" />
+			<Setter Property="Background" Value="Coral"/>
+			<Setter Property="Foreground" Value="Coral"/>
+		</Style>
+		<Style Selector="Slider.volume:vertical /template/ Track > Thumb">
+			<Setter Property="Height" Value="14"/>
+			<Setter Property="Width" Value="14"/>
+			<Setter Property="BorderBrush" Value="Coral"/>
+			<Setter Property="BorderThickness" Value="2"/>
+			<Setter Property="Background" Value="Transparent"/>
+		</Style>
+		<Style Selector="Slider.volume:vertical:pointerover /template/ RepeatButton#PART_DecreaseButton">
+			<Setter Property="Background" Value="Coral"/>
+		</Style>
+	</Window.Styles>
+	
 	<Panel Name="panel">
 		<Grid RowDefinitions="36, 46">
 			<Border Grid.Row="0"
@@ -63,8 +103,10 @@
 					BorderThickness="2,0,2,2"
 					CornerRadius="0,0,6,6"
 					Opacity="1">
-					<Grid RowDefinitions="1, *">
+					<Grid RowDefinitions="1, *"
+						  ColumnDefinitions="*, 174">
 						<Line Grid.Row="0"
+							  Grid.ColumnSpan="2"
 							  Opacity="1" 
 							  Stroke="Coral"
 							  StartPoint="2,0"
@@ -72,7 +114,27 @@
 							  EndPoint="634, 0"
 							  VerticalAlignment="Top"/>
 						<controls:RibbonControl Grid.Row="1"
+												Grid.Column="0"
 												DataContext="{Binding Navigation.Ribbon}"/>
+						<Grid Grid.Row="1"
+							  Grid.Column="1"
+							  ColumnDefinitions="*, 36">
+							<Slider Classes="duration"
+									Grid.Column="0"
+									Value="{Binding MediaManagement.Position}"
+									Maximum="{Binding MediaManagement.Duration}"
+									ToolTip.Tip="{Binding MediaManagement.Timings}"/>
+							<Slider Classes="volume"
+									Grid.Column="1"
+									Orientation="Vertical"
+									Margin="4"
+									Minimum="0"
+									Maximum="1"
+									LargeChange="0.1"
+									SmallChange="0.05"
+									Value="{Binding MediaManagement.Volume}"
+									ToolTip.Tip="{Binding MediaManagement.VolumeText}"/>							
+						</Grid>
 					</Grid>
 				</Border>
 		</Grid>

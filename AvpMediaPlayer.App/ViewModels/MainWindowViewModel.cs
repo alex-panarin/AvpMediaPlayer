@@ -2,6 +2,7 @@
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
 using AvpMediaPlayer.Core.Interfaces;
+using AvpMediaPlayer.Media.Interfaces;
 using AvpMediaPlayer.UI.ViewModels;
 
 namespace AvpMediaPlayer.App.ViewModels
@@ -25,8 +26,12 @@ namespace AvpMediaPlayer.App.ViewModels
                         desktop.Shutdown();
                 })
             };
+
+            MediaManagement = Navigation.MediaManagement;
         }
 
         public NavigationViewModel? Navigation { get; }
+
+        public IMediaManagement? MediaManagement { get; }
     }
 }

@@ -2,13 +2,14 @@
 {
     public interface IMediaManagement
     {
-        public double Volume { get; set; }
-        public bool LoopTrack { get; set; }
-        public bool LoopCatalog { get; set; }
-        public bool LoopLists { get; set; }
-        public double Duration { get; }
-        public double Position { get; set; }
-
+         double Volume { get; set; }
+         bool LoopTrack { get; set; }
+         bool LoopCatalog { get; set; }
+         bool LoopLists { get; set; }
+         double Duration { get; }
+         double Position { get; set; }
+         string Timings { get; }
+         string VolumeText { get; }   
         void SetStream(int stream);
         void CallDurationChange();
         void CallPositionChange();
