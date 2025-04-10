@@ -58,6 +58,10 @@
 					<MenuItem Header="Удалить"
 							  Command="{Binding ListCommand}"
 							  CommandParameter="delete"/>
+					<Separator />
+					<MenuItem Header="Очистить"
+							  Command="{Binding ListCommand}"
+							  CommandParameter="clear"/>
 				</ContextMenu>													  
 			</Setter>
 		</Style>

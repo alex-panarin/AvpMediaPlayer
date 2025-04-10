@@ -21,6 +21,7 @@ namespace AvpMediaPlayer.UI.ViewModels
         const string RenameBeginCmd = "rename_begin";
         const string RenameEndCmd = "rename_end";
         const string DeleteCmd = "delete";
+        const string ClearCmd = "clear";
         public MediaListViewModel(Action<ContentUIModel?> onSelectedChanged,
             IMediaListRepository mediaListRepository)
         {
@@ -152,6 +153,20 @@ namespace AvpMediaPlayer.UI.ViewModels
                 list.IsNeedRename = false;
                 _mediaListRepository.Rename(_OldTitle, list);
                 _OldTitle = null;
+            }
+            else if(cmd == ClearCmd)
+            {
+                if (Items is not null)
+                {
+                    using (Items.LockChangedEvent())
+                        Items.Clear();
+                }
+
+                using (list.Contents.LockChangedEvent())
+                {
+                    _mediaListRepository.Clear(list);
+                    list.Contents.Clear();
+                }
             }
         }
 

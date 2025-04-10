@@ -9,5 +9,6 @@ namespace AvpMediaPlayer.UI.Repositories
         MediaListModel AddOrUpdate(MediaListModel listModel, string[] urls);
         void Rename(string? oldName, MediaListModel listModel);
         void Delete(MediaListModel list);
+        void Clear(MediaListModel list);
     }
 }

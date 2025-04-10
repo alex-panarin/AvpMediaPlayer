@@ -80,5 +80,12 @@ namespace AvpMediaPlayer.UI.Repositories
 
             _dataContext.Delete(list.Title);
         }
+
+        public void Clear(MediaListModel list)
+        {
+            if (list?.Title is null) return;
+
+            _dataContext.Clear(list.Title);
+        }
     }
 }

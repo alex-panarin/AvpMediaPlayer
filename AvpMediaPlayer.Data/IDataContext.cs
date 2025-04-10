@@ -10,5 +10,6 @@ namespace AvpMediaPlayer.Data
         void Delete(string listName);
         void Remove(string listName, string[] media);
         void Rename(string listName, string newName);
+        void Clear(string listName);
     }
 }
