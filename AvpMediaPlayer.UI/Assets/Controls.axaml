@@ -11,13 +11,12 @@
 		<Setter Property="CornerRadius" Value="10" />
 		<Setter Property="BorderThickness" Value="0"/>
 		<Setter Property="Margin" Value="4"/>
-		<Setter Property="Background" Value="#505050"/>
 		<Setter Property="Width" Value="20"/>
 		<Setter Property="Height" Value="20"/>
 	</Style>
 	<Style Selector="Button.btnMin:pointerover /template/ ContentPresenter">
 		<Setter Property="BorderThickness" Value="0" />
-		<Setter Property="Background" Value="#3d3d3d"/>
+		<Setter Property="Background" Value="#505050"/>
 	</Style>
 	<!--BUTTON ROUND-->
 	<Style Selector="Button.btn /template/ ContentPresenter">

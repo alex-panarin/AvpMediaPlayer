@@ -7,6 +7,7 @@ using AvpMediaPlayer.Core;
 using AvpMediaPlayer.Core.Helpers;
 using AvpMediaPlayer.Core.Interfaces;
 using AvpMediaPlayer.Core.Models;
+using AvpMediaPlayer.Data.Models;
 using AvpMediaPlayer.Media.Audio;
 using AvpMediaPlayer.Media.Interfaces;
 using AvpMediaPlayer.Media.Models;
@@ -33,6 +34,7 @@ namespace AvpMediaPlayer.UI.ViewModels
         private SettingsWindow? _settingsWindow;
         private readonly FilePickerFileType _filter;
         const string _NewListName = "Новый список";
+        const string _StaticTitle = "AvpMediaPlayer v1.0";
 
         public NavigationViewModel(FilePickerFileType filter
             , ISettingsProvider settingsProvider)
@@ -69,7 +71,7 @@ namespace AvpMediaPlayer.UI.ViewModels
 
         public string? SelectedText 
         { 
-            get => _SelectedText; 
+            get => _SelectedText ?? _StaticTitle; 
             set => SetProperty(ref _SelectedText, value); 
         }
 
@@ -192,6 +194,8 @@ namespace AvpMediaPlayer.UI.ViewModels
                     list.ListCommand = new((c) => MediaList.OnListCommand(list, c));
                     MediaList.Lists?.Add(list);
                 }
+                
+                MediaList.IsPaneOpen = true; 
 
                 MediaList.SelectedList = list;
             }
