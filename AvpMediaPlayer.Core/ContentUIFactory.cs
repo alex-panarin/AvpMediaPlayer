@@ -28,7 +28,7 @@ namespace AvpMediaPlayer.Core
         public IEnumerable<ContentUIModel> Get(Content content)
         {
             foreach (var val in Load(content)
-                .Where(c => c?.Model is not null && Filter?.Invoke(c.Model) == true))
+                .Where(c => c?.Model is not null && Filter(c.Model) == true))
             {
                 yield return val;
             }
@@ -38,8 +38,7 @@ namespace AvpMediaPlayer.Core
         {
             if (content.IsDirectory)
             {
-                var contents = _contentRepository.Get(content);
-                return contents
+                return _contentRepository.Get(content)
                     .SelectMany(c => Load(c)); 
                 // (new ContentUIModel(_contentFactory.Create(c), Load)); // Deffered loading
             }
