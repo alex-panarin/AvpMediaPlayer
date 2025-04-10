@@ -14,9 +14,8 @@ namespace AvpMediaPlayer.Media.Models
             }
             catch (UnsupportedFormatException)
             {
-                ;// TODO Debug
+                throw;// TODO Debug
             }
-            return null;
         }
 
         private readonly TagLib.File _File;

@@ -1,5 +1,6 @@
-﻿ using AvpMediaPlayer.Core.Interfaces;
+﻿using AvpMediaPlayer.Core.Interfaces;
 using AvpMediaPlayer.Core.Models;
+using System.Diagnostics;
 
 namespace AvpMediaPlayer.Core
 {
@@ -12,8 +13,8 @@ namespace AvpMediaPlayer.Core
             , IMediaContentFactory contextFactory
             , Func<Content, bool> filter)
         {
-            this._contentRepository = contentRepository ?? throw new System.ArgumentNullException(nameof(contentRepository));
-            this._contentFactory = contextFactory;
+            _contentRepository = contentRepository ?? throw new System.ArgumentNullException(nameof(contentRepository));
+            _contentFactory = contextFactory;
             Filter = filter ?? new(c => c != null);
         }
 
@@ -26,19 +27,31 @@ namespace AvpMediaPlayer.Core
 
         public IEnumerable<ContentUIModel> Get(Content content)
         {
-            foreach (var val in Load(content))
+            foreach (var val in Load(content)
+                .Where(c => c?.Model is not null && Filter?.Invoke(c.Model) == true))
+            {
                 yield return val;
+            }
         }
 
         private IEnumerable<ContentUIModel> Load(Content content)
         {
             if (content.IsDirectory)
             {
-                return _contentRepository.Get(content)
-                    .Where(Filter)
-                    .Select(c => new ContentUIModel(_contentFactory.Create(c), Load)); // Deffered loading
+                var contents = _contentRepository.Get(content);
+                return contents
+                    .SelectMany(c => Load(c)); 
+                // (new ContentUIModel(_contentFactory.Create(c), Load)); // Deffered loading
             }
-            return [new ContentUIModel(_contentFactory.Create(content), Load)];
+            try
+            {
+                return [new ContentUIModel(_contentFactory.Create(content), Load)];
+            }
+            catch (Exception ex)
+            {
+                Debug.Write($"ContentUIFactory.Load Error: {ex}");
+            }
+            return Enumerable.Empty<ContentUIModel>();
         }
     }
 }

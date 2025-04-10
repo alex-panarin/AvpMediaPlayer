@@ -11,7 +11,7 @@ namespace AvpMediaPlayer.Media.Models
                 return new ContainerMediaContent(content);
 
             var tag = MediaTag.Create(content.Url);
-
+            
             return tag?.MediaType switch
             {
                 MediaTypes.Video => new VideoMediaContent(content, tag),
