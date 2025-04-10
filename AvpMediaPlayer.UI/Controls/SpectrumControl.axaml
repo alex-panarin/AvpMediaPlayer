@@ -18,7 +18,7 @@
 				<LinearGradientBrush StartPoint="50% 0%" 
 									 EndPoint="50% 100%">
 					<GradientStops>
-						<GradientStop Color="DarkGreen" Offset="0.1"/>
+						<GradientStop Color="DarkGreen" Offset="0"/>
 						<GradientStop Color="Green" Offset="0.3"/>
 						<GradientStop Color="LimeGreen" Offset="0.5"/>
 						<GradientStop Color="Lime" Offset="0.7"/>

@@ -7,6 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <AvaloniaXaml Remove="Controls\MediaContainer.axaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controls\MediaContainer.axaml.cs" />
     <Compile Remove="ViewModels\ContentViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
