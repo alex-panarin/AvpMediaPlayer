@@ -2,7 +2,7 @@
 
 namespace AvpMediaPlayer.Data
 {
-    public interface IDataContext
+    public interface IMediaDataContext
     {
         MediaList Add(string listName, string[] media);
         MediaList[] Get();

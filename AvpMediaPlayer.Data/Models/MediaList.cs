@@ -2,11 +2,8 @@
 
 namespace AvpMediaPlayer.Data.Models
 {
-    public class MediaList
+    public class MediaList : Entity
     {
-        [BsonId(true)]
-        public int Id { get; set; }
-        public string? Name { get; set; }
         public string[] Urls { get; set; } = [];
     }
 }

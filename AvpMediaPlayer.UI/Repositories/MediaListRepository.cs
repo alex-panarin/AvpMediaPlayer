@@ -8,12 +8,13 @@ namespace AvpMediaPlayer.UI.Repositories
         : IMediaListRepository
     {
         const string dbname = "medialist.db";
-        private readonly IDataContext _dataContext;
+        const string name = "medialist";
+        private readonly IMediaDataContext _dataContext;
         private readonly IContentUIFactory _contentUIFactory;
 
         public MediaListRepository(IContentUIFactory contentUIFactory)
         {
-            _dataContext = new DataContext(dbname);
+            _dataContext = new MediaDataContext(dbname, name);
             _contentUIFactory = contentUIFactory;
         }
 

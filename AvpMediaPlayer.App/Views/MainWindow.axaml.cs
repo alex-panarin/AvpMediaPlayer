@@ -8,4 +8,10 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
     }
+
+    protected override void OnSizeChanged(SizeChangedEventArgs e)
+    {
+        base.OnSizeChanged(e);
+        var screen = this.Screens.ScreenFromVisual(this);
+    }
 }

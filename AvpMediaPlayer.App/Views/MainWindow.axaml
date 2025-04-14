@@ -18,7 +18,7 @@
 		ExtendClientAreaTitleBarHeightHint="-1"
 		ExtendClientAreaChromeHints="NoChrome"
 		WindowState="Normal"
-		WindowStartupLocation="CenterScreen"
+		WindowStartupLocation="Manual"
 		Width="640"
 		Height="84"
 		CanResize="False"

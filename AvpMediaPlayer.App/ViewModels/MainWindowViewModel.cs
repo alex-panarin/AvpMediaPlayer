@@ -1,6 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
+using AvpMediaPlayer.App.Models;
 using AvpMediaPlayer.Core.Interfaces;
 using AvpMediaPlayer.Media.Interfaces;
 using AvpMediaPlayer.UI.ViewModels;
@@ -16,7 +17,8 @@ namespace AvpMediaPlayer.App.ViewModels
         };
         public MainWindowViewModel() { }
 
-        public MainWindowViewModel(ISettingsProvider settingsProvider)
+        public MainWindowViewModel(ISettingsProvider settingsProvider
+            , IWindowRepository repository)
         {
             Navigation = new(_filter, settingsProvider)
             {
@@ -28,10 +30,12 @@ namespace AvpMediaPlayer.App.ViewModels
             };
 
             MediaManagement = Navigation.MediaManagement;
+            Repository = repository;
         }
 
         public NavigationViewModel? Navigation { get; }
 
         public IMediaManagement? MediaManagement { get; }
+        public IWindowRepository? Repository { get; }
     }
 }
