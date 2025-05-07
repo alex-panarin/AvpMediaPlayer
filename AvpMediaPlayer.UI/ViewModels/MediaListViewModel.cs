@@ -72,6 +72,7 @@ namespace AvpMediaPlayer.UI.ViewModels
             get => _IsWaitLoad;
             set => SetProperty(ref _IsWaitLoad, value);
         }
+        public SettingsModel? Settings { get; internal set; }
 
         internal void AddMediaList(IReadOnlyList<IStorageItem> items)
         {
@@ -124,9 +125,13 @@ namespace AvpMediaPlayer.UI.ViewModels
 
                             Lists.Clear();
                             Lists.AddRange(lists);
-                            if(Lists.Any())
+
+                            if (FindAndSelect(Settings?.LastList, Settings?.LastTrack) == false)
                             {
-                                SelectedList = Lists[0];
+                                if (Lists.Any())
+                                {
+                                    SelectedList = Lists[0];
+                                }
                             }
                         }
                         IsWaitLoad = false;
@@ -175,6 +180,23 @@ namespace AvpMediaPlayer.UI.ViewModels
         internal void OnDoubleClick()
         {
             DoubleClick?.Invoke();
+        }
+
+        private bool FindAndSelect(string? lastList, string? lastTrack)
+        {
+            if (lastList is not null)
+            {
+                var list = Lists?.FirstOrDefault(l => l.Title == lastList);
+                if (list is not null)
+                {
+                    SelectedList = list;
+                    var track = Items?.FirstOrDefault(t => t.Title == lastTrack);
+                    SelectedItem = track is not null ? track : Items?.FirstOrDefault();
+
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

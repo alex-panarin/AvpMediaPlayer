@@ -22,5 +22,7 @@ namespace AvpMediaPlayer.UI.ViewModels
             get => _Settings; 
             set => SetProperty(ref _Settings, value); 
         }
+
+        public void SaveSettings() => _settingsProvider?.Save(_Settings);
     }
 }

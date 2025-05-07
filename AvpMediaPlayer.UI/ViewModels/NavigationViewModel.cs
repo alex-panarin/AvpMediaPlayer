@@ -51,14 +51,16 @@ namespace AvpMediaPlayer.UI.ViewModels
             _visualizer = new AudioVisualizer();
             _mediaPlayer = new AudioPlayer(_mediaManagement, _visualizer, this);
             _settings = new SettingsViewModel(settingsProvider);
+            var settings = _settings.Settings;
 
-            if (_settings.Settings is not null)
+            if (settings is not null)
             {
-                _mediaManagement.LoopTrack = _settings.Settings.LoopTrack;
-                _mediaManagement.LoopCatalog = _settings.Settings.LoopCatalog;
-                _mediaManagement.LoopLists = _settings.Settings.LoopLists;
+                _mediaManagement.LoopTrack = settings.LoopTrack;
+                _mediaManagement.LoopCatalog = settings.LoopCatalog;
+                _mediaManagement.LoopLists = settings.LoopLists;
             }
-
+            
+            MediaList.Settings = settings;
             MediaList.DoubleClick = () =>
             {
                 if (_SelectedItem is not null)
@@ -224,5 +226,14 @@ namespace AvpMediaPlayer.UI.ViewModels
 
         private void OnSelectedChanged(ContentUIModel? item)
             => SelectedItem = item;
+
+        public void SaveSettings()
+        {
+            var list = MediaList?.SelectedList?.Title ?? string.Empty; 
+            var track = MediaList?.SelectedItem?.Title ?? string.Empty;
+            _settings!.Settings!.LastList = list;
+            _settings!.Settings!.LastTrack = track;
+            _settings.SaveSettings();
+        }
     }
 }

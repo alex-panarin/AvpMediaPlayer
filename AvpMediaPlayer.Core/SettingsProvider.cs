@@ -19,7 +19,7 @@ namespace AvpMediaPlayer.Core
 
         public SettingsModel? Get()
         {
-            using var fileStream = File.Open(_path, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+            using var fileStream = File.Open(_path, FileMode.OpenOrCreate);
             try
             {
                 return JsonSerializer.Deserialize<SettingsModel>(fileStream, _options);
@@ -39,15 +39,16 @@ namespace AvpMediaPlayer.Core
             {
                 var content = JsonSerializer.Serialize(model, _options);
                 var bytes = Encoding.UTF8.GetBytes(content);
+                fileStream.Position = 0;
                 fileStream.Write(bytes, 0, bytes.Length);
             }
             catch { }
         }
 
-        public void Save(SettingsModel model)
+        public void Save(SettingsModel? model)
         {
-            using var fileStream = File.Open(_path, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-            SaveInternal(model, fileStream);
+            using var fileStream = File.OpenWrite(_path);
+            SaveInternal(model!, fileStream);
         }
     }
 }

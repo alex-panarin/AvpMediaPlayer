@@ -25,12 +25,17 @@ namespace AvpMediaPlayer.App.ViewModels
                 CloseApp = new(() =>
                 {
                     if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+                    {
+                        Navigation?.SaveSettings();
                         desktop.Shutdown();
+                    }
                 })
             };
-
+            
             MediaManagement = Navigation.MediaManagement;
             Repository = repository;
+            // First Load
+            Navigation.MediaList.IsPaneOpen = true;
         }
 
         public NavigationViewModel? Navigation { get; }
