@@ -6,10 +6,23 @@
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+    <ApplicationIcon>media-play-music.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <AvaloniaResource Include="Assets\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="media-play-music.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AvaloniaResource Include="media-play-music.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="media-play-music.ico" />
   </ItemGroup>
 
   <ItemGroup>

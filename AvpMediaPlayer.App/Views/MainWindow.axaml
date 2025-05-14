@@ -8,7 +8,7 @@
         mc:Ignorable="d" d:DesignWidth="640" d:DesignHeight="86"
         x:Class="AvpMediaPlayer.App.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Icon="/Assets/avpmediaplayer.ico"
+        Icon="/Assets/media-play-music.ico"
         Title="AvpMediaPlayer.App"
 		Background="Transparent"
 		BorderThickness="0"
