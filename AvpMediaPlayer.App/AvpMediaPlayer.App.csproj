@@ -6,15 +6,10 @@
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
-    <ApplicationIcon>avpmediaplayer.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <AvaloniaResource Include="Assets\**" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <EmbeddedResource Include="Assets\avpmediaplayer.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -33,4 +28,6 @@
   <ItemGroup>
     <ProjectReference Include="..\AvpMediaPlayer.UI\AvpMediaPlayer.UI.csproj" />
   </ItemGroup>
+
+  
 </Project>
