@@ -39,7 +39,7 @@ namespace AvpMediaPlayer.Core
             {
                 var content = JsonSerializer.Serialize(model, _options);
                 var bytes = Encoding.UTF8.GetBytes(content);
-                fileStream.Position = 0;
+                
                 fileStream.Write(bytes, 0, bytes.Length);
             }
             catch { }
@@ -47,7 +47,10 @@ namespace AvpMediaPlayer.Core
 
         public void Save(SettingsModel? model)
         {
-            using var fileStream = File.OpenWrite(_path);
+            if(File.Exists(_path))
+                File.Delete(_path);
+
+            using var fileStream = File.Open(_path, FileMode.CreateNew);
             SaveInternal(model!, fileStream);
         }
     }
